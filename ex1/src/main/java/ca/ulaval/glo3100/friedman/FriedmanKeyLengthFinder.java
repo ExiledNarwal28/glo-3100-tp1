@@ -7,6 +7,11 @@ import java.util.Map;
 
 public class FriedmanKeyLengthFinder {
 
+    // We assume that the plain text is in english
+    private static final double ENGLISH_INDEX_OF_COINCIDENCE = 0.066;
+    private static final int MIN_KEY_LENGTH = 1;
+    private static final int MAX_KEY_LENGTH = 9;
+
     public void findKeyLength(String cypherText) {
         Logger.logDebug("Finding key length using Friedman test");
 
@@ -18,7 +23,11 @@ public class FriedmanKeyLengthFinder {
             occurrences.forEach((character, occurrence) -> Logger.logDebug(String.format("%c : %d", character, occurrence)));
         }
 
-        // TODO : Find key length
+        // TODO : Calculate index of coincidence for a key length of 1
+        // TODO : Calculate indexes of coincidence for a given key length
+        // TODO : Map tested key length to average index of coincidence
+        // TODO : Find average index of coincidence closest to english
+        // TODO : Return key length
     }
 
     private Map<Character, Integer> calculateOccurrences(String cypherText) {
