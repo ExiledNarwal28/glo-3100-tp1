@@ -2,9 +2,7 @@ package ca.ulaval.glo3100.friedman;
 
 import ca.ulaval.glo3100.console.Logger;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class FriedmanKeyLengthFinder {
 
@@ -18,22 +16,40 @@ public class FriedmanKeyLengthFinder {
 
         Logger.logDebug(String.format("Given cypher text : %s", cypherText));
 
-        Map<Character, Integer> occurrences = calculateOccurrences(cypherText);
+        for (int keyLength = MIN_KEY_LENGTH; keyLength <= MAX_KEY_LENGTH; keyLength++) {
+            List<Double> indexesOfCoincidence = calculateIndexesOfCoincidence(cypherText, keyLength);
+            StringBuilder indexesBuilder = new StringBuilder();
 
-        if (Logger.isDebugging) {
-            occurrences.forEach((character, occurrence) -> Logger.logDebug(String.format("%c : %d", character, occurrence)));
+            for (Double indexOfCoincidence : indexesOfCoincidence) {
+                indexesBuilder.append(String.format("%f ", indexOfCoincidence));
+            }
+
+            Logger.logDebug(String.format("Indexes of coincidence for key length of %d -> %s", keyLength, indexesBuilder));
         }
 
-        double indexOfCoincidence = calculateIndexOfCoincidence(occurrences.values(), cypherText.length());
-
-        Logger.logDebug(String.format("Index of coincidence for key size of 1 : %f", indexOfCoincidence));
-
-        // TODO : Calculate indexes of coincidence for a given key length
         // TODO : Map tested key length to average index of coincidence
         // TODO : Find average index of coincidence closest to english
         // TODO : Return key length
     }
 
+    private List<Double> calculateIndexesOfCoincidence(String text, int keyLength) {
+        List<Double> indexesOfCoincidence = new ArrayList<>();
+
+        for (int i = 1; i <= keyLength; i++) {
+            StringBuilder subtextBuilder = new StringBuilder();
+
+            for (int j = i - 1; j < text.length(); j += keyLength) {
+                subtextBuilder.append(text.charAt(j));
+            }
+
+            Map<Character, Integer> occurrences = calculateOccurrences(subtextBuilder.toString());
+            indexesOfCoincidence.add(calculateIndexOfCoincidence(occurrences.values(), subtextBuilder.length()));
+        }
+
+        return indexesOfCoincidence;
+    }
+
+    // TODO : We should only use List<Integer>
     private Map<Character, Integer> calculateOccurrences(String text) {
         Map<Character, Integer> occurrences = new HashMap<>();
 
@@ -48,6 +64,7 @@ public class FriedmanKeyLengthFinder {
         return occurrences;
     }
 
+    // TODO : Calculate occurences in here
     private double calculateIndexOfCoincidence(Collection<Integer> occurences, double textSize) {
         double indexOfCoincidence = 0;
 
