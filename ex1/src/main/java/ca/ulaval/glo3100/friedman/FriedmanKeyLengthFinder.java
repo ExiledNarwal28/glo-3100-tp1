@@ -19,12 +19,16 @@ public class FriedmanKeyLengthFinder {
         for (int keyLength = MIN_KEY_LENGTH; keyLength <= MAX_KEY_LENGTH; keyLength++) {
             List<Double> indexesOfCoincidence = calculateIndexesOfCoincidence(cypherText, keyLength);
             StringBuilder indexesBuilder = new StringBuilder();
+            double average = 0;
 
             for (Double indexOfCoincidence : indexesOfCoincidence) {
                 indexesBuilder.append(String.format("%f ", indexOfCoincidence));
+                average += indexOfCoincidence;
             }
 
-            Logger.logDebug(String.format("Indexes of coincidence for key length of %d -> %s", keyLength, indexesBuilder));
+            average = average / indexesOfCoincidence.size();
+
+            Logger.logDebug(String.format("Indexes of coincidence for key length of %d -> %s (average : %f)", keyLength, indexesBuilder, average));
         }
 
         // TODO : Map tested key length to average index of coincidence
