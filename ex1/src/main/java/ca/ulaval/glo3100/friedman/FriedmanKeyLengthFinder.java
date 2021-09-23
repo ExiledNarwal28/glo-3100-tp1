@@ -42,15 +42,28 @@ public class FriedmanKeyLengthFinder {
                 subtextBuilder.append(text.charAt(j));
             }
 
-            Map<Character, Integer> occurrences = calculateOccurrences(subtextBuilder.toString());
-            indexesOfCoincidence.add(calculateIndexOfCoincidence(occurrences.values(), subtextBuilder.length()));
+            indexesOfCoincidence.add(calculateIndexOfCoincidence(subtextBuilder.toString()));
         }
 
         return indexesOfCoincidence;
     }
 
-    // TODO : We should only use List<Integer>
-    private Map<Character, Integer> calculateOccurrences(String text) {
+    private double calculateIndexOfCoincidence(String text) {
+        Collection<Integer> occurences = calculateOccurrences(text);
+        double indexOfCoincidence = 0;
+
+        // Sum of : n_1 * (n_1 - 1)
+        for (Integer occurrence : occurences) {
+            indexOfCoincidence += occurrence * (occurrence - 1);
+        }
+
+        // Divide by : n / (n - 1)
+        indexOfCoincidence = indexOfCoincidence / (text.length() * (text.length() - 1));
+
+        return indexOfCoincidence;
+    }
+
+    private Collection<Integer> calculateOccurrences(String text) {
         Map<Character, Integer> occurrences = new HashMap<>();
 
         for (Character character : text.toCharArray()) {
@@ -61,21 +74,6 @@ public class FriedmanKeyLengthFinder {
             }
         }
 
-        return occurrences;
-    }
-
-    // TODO : Calculate occurences in here
-    private double calculateIndexOfCoincidence(Collection<Integer> occurences, double textSize) {
-        double indexOfCoincidence = 0;
-
-        // Sum of : n_1 * (n_1 - 1)
-        for (Integer occurrence : occurences) {
-            indexOfCoincidence += occurrence * (occurrence - 1);
-        }
-
-        // Divide by : n / (n - 1)
-        indexOfCoincidence = indexOfCoincidence / (textSize * (textSize - 1));
-
-        return indexOfCoincidence;
+        return occurrences.values();
     }
 }
