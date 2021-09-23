@@ -8,13 +8,15 @@ import java.util.Map;
 public class FriedmanKeyLengthFinder {
 
     public void findKeyLength(String cypherText) {
-        Logger.log("Finding key length using Friedman test");
+        Logger.logDebug("Finding key length using Friedman test");
 
-        Logger.log(String.format("Given cypher text : %s", cypherText));
+        Logger.logDebug(String.format("Given cypher text : %s", cypherText));
 
         Map<Character, Integer> occurrences = calculateOccurrences(cypherText);
 
-        occurrences.forEach((character, occurrence) -> Logger.log(String.format("%c : %d", character, occurrence)));
+        if (Logger.isDebugging) {
+            occurrences.forEach((character, occurrence) -> Logger.logDebug(String.format("%c : %d", character, occurrence)));
+        }
 
         // TODO : Find key length
     }

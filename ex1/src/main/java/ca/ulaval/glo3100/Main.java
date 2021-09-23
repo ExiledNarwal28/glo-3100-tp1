@@ -9,6 +9,7 @@ public class Main {
 
     private static final String ARG_FRIEDMAN = "friedman";
     private static final String ARG_DECRYPT = "decrypt";
+    private static final String ARG_DEBUG = "debug";
 
     public static void main(String[] args) {
         if (argsAreInvalid(args)) {
@@ -16,11 +17,15 @@ public class Main {
             return;
         }
 
+        if (args.length > 1 && args[1].equals(ARG_DEBUG)) {
+            Logger.isDebugging = true;
+        }
+
         if (args[0].equals(ARG_FRIEDMAN)) {
             new FriedmanKeyLengthFinder().findKeyLength(CYPHERTEXT);
         } else if (args[0].equals(ARG_DECRYPT)) {
             // TODO : DO Ex2 a
-            Logger.log("Ex2 a : Decrypt!");
+            Logger.logDebug("Ex2 a : Decrypt!");
         } else {
             displayHelpText();
         }
@@ -31,8 +36,8 @@ public class Main {
     }
 
     private static void displayHelpText() {
-        Logger.log("You need to enter one of the following args :");
-        Logger.log(String.format("  %s : Exercise 1.a : Calculate key length using Friedman test", ARG_FRIEDMAN));
-        Logger.log(String.format("  %s : Exercise 1.b : Decrypt ciphertext", ARG_DECRYPT));
+        Logger.logInfo("You need to enter one of the following args :");
+        Logger.logInfo(String.format("  %s : Exercise 1.a : Calculate key length using Friedman test", ARG_FRIEDMAN));
+        Logger.logInfo(String.format("  %s : Exercise 1.b : Decrypt ciphertext", ARG_DECRYPT));
     }
 }
