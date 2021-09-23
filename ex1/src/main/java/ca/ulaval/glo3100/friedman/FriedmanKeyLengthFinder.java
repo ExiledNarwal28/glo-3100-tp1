@@ -2,6 +2,7 @@ package ca.ulaval.glo3100.friedman;
 
 import ca.ulaval.glo3100.console.Logger;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,17 +24,20 @@ public class FriedmanKeyLengthFinder {
             occurrences.forEach((character, occurrence) -> Logger.logDebug(String.format("%c : %d", character, occurrence)));
         }
 
-        // TODO : Calculate index of coincidence for a key length of 1
+        double indexOfCoincidence = calculateIndexOfCoincidence(occurrences.values(), cypherText.length());
+
+        Logger.logDebug(String.format("Index of coincidence for key size of 1 : %f", indexOfCoincidence));
+
         // TODO : Calculate indexes of coincidence for a given key length
         // TODO : Map tested key length to average index of coincidence
         // TODO : Find average index of coincidence closest to english
         // TODO : Return key length
     }
 
-    private Map<Character, Integer> calculateOccurrences(String cypherText) {
+    private Map<Character, Integer> calculateOccurrences(String text) {
         Map<Character, Integer> occurrences = new HashMap<>();
 
-        for (Character character : cypherText.toCharArray()) {
+        for (Character character : text.toCharArray()) {
             if (occurrences.containsKey(character)) {
                 occurrences.put(character, occurrences.get(character) + 1);
             } else {
@@ -42,5 +46,19 @@ public class FriedmanKeyLengthFinder {
         }
 
         return occurrences;
+    }
+
+    private double calculateIndexOfCoincidence(Collection<Integer> occurences, double textSize) {
+        double indexOfCoincidence = 0;
+
+        // Sum of : n_1 * (n_1 - 1)
+        for (Integer occurrence : occurences) {
+            indexOfCoincidence += occurrence * (occurrence - 1);
+        }
+
+        // Divide by : n / (n - 1)
+        indexOfCoincidence = indexOfCoincidence / (textSize * (textSize - 1));
+
+        return indexOfCoincidence;
     }
 }
