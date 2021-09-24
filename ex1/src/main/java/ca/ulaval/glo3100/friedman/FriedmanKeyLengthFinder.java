@@ -1,6 +1,7 @@
 package ca.ulaval.glo3100.friedman;
 
 import ca.ulaval.glo3100.console.Logger;
+import ca.ulaval.glo3100.utils.ShiftedTextUtils;
 
 import java.util.*;
 
@@ -11,7 +12,7 @@ public class FriedmanKeyLengthFinder {
     private static final int MIN_KEY_LENGTH = 1;
     private static final int MAX_KEY_LENGTH = 9;
 
-    public int findKeyLength(String cypherText) {
+    public static int findKeyLength(String cypherText) {
         Logger.logDebug("Finding key length using Friedman test");
 
         Logger.logDebug(String.format("Given cypher text : %s", cypherText));
@@ -45,23 +46,18 @@ public class FriedmanKeyLengthFinder {
         return closestKeyLength;
     }
 
-    private List<Double> calculateIndexesOfCoincidence(String text, int keyLength) {
+    private static List<Double> calculateIndexesOfCoincidence(String text, int keyLength) {
+        List<String> subtexts = ShiftedTextUtils.getSubtexts(text, keyLength);
         List<Double> indexesOfCoincidence = new ArrayList<>();
 
-        for (int i = 1; i <= keyLength; i++) {
-            StringBuilder subtextBuilder = new StringBuilder();
-
-            for (int j = i - 1; j < text.length(); j += keyLength) {
-                subtextBuilder.append(text.charAt(j));
-            }
-
-            indexesOfCoincidence.add(calculateIndexOfCoincidence(subtextBuilder.toString()));
+        for (String subtext : subtexts) {
+            indexesOfCoincidence.add(calculateIndexOfCoincidence(subtext));
         }
 
         return indexesOfCoincidence;
     }
 
-    private double calculateIndexOfCoincidence(String text) {
+    private static double calculateIndexOfCoincidence(String text) {
         Collection<Integer> occurences = calculateOccurrences(text);
         double indexOfCoincidence = 0;
 
@@ -76,7 +72,7 @@ public class FriedmanKeyLengthFinder {
         return indexOfCoincidence;
     }
 
-    private Collection<Integer> calculateOccurrences(String text) {
+    private static Collection<Integer> calculateOccurrences(String text) {
         Map<Character, Integer> occurrences = new HashMap<>();
 
         for (Character character : text.toCharArray()) {

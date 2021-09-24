@@ -23,12 +23,12 @@ public class Main {
         }
 
         if (args[0].equals(ARG_FRIEDMAN)) {
-            int keyLength = new FriedmanKeyLengthFinder().findKeyLength(CYPHER_TEXT);
+            int keyLength = FriedmanKeyLengthFinder.findKeyLength(CYPHER_TEXT);
 
             Logger.logInfo(String.format("Most probable key length found : %d", keyLength));
         } else if (args[0].equals(ARG_DECRYPT)) {
-            int keyLength = new FriedmanKeyLengthFinder().findKeyLength(CYPHER_TEXT);
-            String plainText = new VigenereDecrypter().decrypt(CYPHER_TEXT, keyLength);
+            int keyLength = FriedmanKeyLengthFinder.findKeyLength(CYPHER_TEXT);
+            String plainText = VigenereDecrypter.decrypt(CYPHER_TEXT, keyLength);
 
             Logger.logInfo(String.format("Plain text : %s", plainText));
         } else {
