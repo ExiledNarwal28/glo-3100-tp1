@@ -8,6 +8,7 @@ public class CharacterOccurrenceUtils {
         return getMapOfOccurrences(text).values();
     }
 
+    // TODO : This doesn't use a mutual index of coincidence, which is most likely why it "almost" works
     public static char findMostFrequentCharacter(String text) {
         Map<Character, Integer> occurrences = getMapOfOccurrences(text);
 

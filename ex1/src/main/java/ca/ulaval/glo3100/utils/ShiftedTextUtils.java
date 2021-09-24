@@ -20,4 +20,19 @@ public class ShiftedTextUtils {
 
         return subtexts;
     }
+
+    public static String getText(List<String> subtexts) {
+        StringBuilder text = new StringBuilder();
+
+        // TODO : Find better way to get size
+        for (int i = 0; i < subtexts.get(0).length(); i++) {
+            for (String subtext : subtexts) {
+                if (subtext.length() > i) {
+                    text.append(subtext.charAt(i));
+                }
+            }
+        }
+
+        return text.toString();
+    }
 }

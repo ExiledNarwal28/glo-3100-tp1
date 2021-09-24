@@ -29,13 +29,12 @@ public class VigenereDecrypter {
             Logger.logDebug(String.format("--> Most frequent character : %s (shift from '%s' : %d)", mostFrequentCharacter, ENGLISH_MOST_FREQUENT_LETTER, shift));
 
             String unShiftedSubtext = unShiftText(subtext, shift);
+            unshiftedSubtexts.add(unShiftedSubtext);
 
             Logger.logDebug(String.format("Un-shifted subtext : %s", unShiftedSubtext));
         }
 
-        // TODO : Assemble back plain text
-
-        return "";
+        return ShiftedTextUtils.getText(unshiftedSubtexts);
     }
 
     private static String unShiftText(String text, int shift) {
