@@ -11,10 +11,13 @@ public class FriedmanKeyLengthFinder {
     private static final int MIN_KEY_LENGTH = 1;
     private static final int MAX_KEY_LENGTH = 9;
 
-    public void findKeyLength(String cypherText) {
+    public int findKeyLength(String cypherText) {
         Logger.logDebug("Finding key length using Friedman test");
 
         Logger.logDebug(String.format("Given cypher text : %s", cypherText));
+
+        double closestDistance = Double.MAX_VALUE; // initial closest distance
+        int closestKeyLength = MIN_KEY_LENGTH; // initial closest key length
 
         for (int keyLength = MIN_KEY_LENGTH; keyLength <= MAX_KEY_LENGTH; keyLength++) {
             List<Double> indexesOfCoincidence = calculateIndexesOfCoincidence(cypherText, keyLength);
@@ -29,11 +32,17 @@ public class FriedmanKeyLengthFinder {
             average = average / indexesOfCoincidence.size();
 
             Logger.logDebug(String.format("Indexes of coincidence for key length of %d -> %s (average : %f)", keyLength, indexesBuilder, average));
+
+            double averageDistance = Math.abs(average - ENGLISH_INDEX_OF_COINCIDENCE);
+            if (averageDistance < closestDistance) {
+                closestDistance = averageDistance;
+                closestKeyLength = keyLength;
+            }
         }
 
-        // TODO : Map tested key length to average index of coincidence
-        // TODO : Find average index of coincidence closest to english
-        // TODO : Return key length
+        Logger.logDebug(String.format("Closest key length found : %d", closestKeyLength));
+
+        return closestKeyLength;
     }
 
     private List<Double> calculateIndexesOfCoincidence(String text, int keyLength) {

@@ -1,6 +1,7 @@
 package ca.ulaval.glo3100;
 
 import ca.ulaval.glo3100.console.Logger;
+import ca.ulaval.glo3100.decryption.VigenereDecrypter;
 import ca.ulaval.glo3100.friedman.FriedmanKeyLengthFinder;
 
 public class Main {
@@ -22,10 +23,14 @@ public class Main {
         }
 
         if (args[0].equals(ARG_FRIEDMAN)) {
-            new FriedmanKeyLengthFinder().findKeyLength(CYPHER_TEXT);
+            int keyLength = new FriedmanKeyLengthFinder().findKeyLength(CYPHER_TEXT);
+
+            Logger.logInfo(String.format("Most probable key length found : %d", keyLength));
         } else if (args[0].equals(ARG_DECRYPT)) {
-            // TODO : DO Ex2 a
-            Logger.logDebug("Ex2 a : Decrypt!");
+            int keyLength = new FriedmanKeyLengthFinder().findKeyLength(CYPHER_TEXT);
+            String plainText = new VigenereDecrypter().decrypt(CYPHER_TEXT, keyLength);
+
+            Logger.logInfo(String.format("Plain text : %s", plainText));
         } else {
             displayHelpText();
         }
