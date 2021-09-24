@@ -22,15 +22,18 @@ public class ShiftedTextUtils {
     }
 
     public static String getText(List<String> subtexts) {
+        String joinedSubtexts = String.join("", subtexts);
         StringBuilder text = new StringBuilder();
+        int i = 0;
 
-        // TODO : Find better way to get size
-        for (int i = 0; i < subtexts.get(0).length(); i++) {
+        for (int j = 0; j < joinedSubtexts.length(); j += subtexts.size()) {
             for (String subtext : subtexts) {
                 if (subtext.length() > i) {
                     text.append(subtext.charAt(i));
                 }
             }
+
+            i++;
         }
 
         return text.toString();
