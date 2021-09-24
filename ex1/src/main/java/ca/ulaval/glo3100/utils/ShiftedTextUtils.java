@@ -5,6 +5,9 @@ import java.util.List;
 
 public class ShiftedTextUtils {
 
+    private static final int FIRST_POSSIBLE_LETTER_POSITION = 'A';
+    private static final int LAST_POSSIBLE_LETTER_POSITION = 'Z';
+
     public static List<String> getSubtexts(String text, int keyLength) {
         List<String> subtexts = new ArrayList<>();
 
@@ -37,5 +40,25 @@ public class ShiftedTextUtils {
         }
 
         return text.toString();
+    }
+
+    public static String unShiftText(String text, int shift) {
+        StringBuilder unShiftedText = new StringBuilder();
+        for (char character : text.toCharArray()) {
+            int characterPosition = character;
+            int unShiftedCharacterPosition = characterPosition - shift;
+
+            // TODO : This logic should be moved
+            if (unShiftedCharacterPosition < FIRST_POSSIBLE_LETTER_POSITION) {
+                unShiftedCharacterPosition = (LAST_POSSIBLE_LETTER_POSITION + 1) - (shift - (characterPosition - FIRST_POSSIBLE_LETTER_POSITION));
+            } else if (unShiftedCharacterPosition > LAST_POSSIBLE_LETTER_POSITION) {
+                unShiftedCharacterPosition = FIRST_POSSIBLE_LETTER_POSITION + (shift - (LAST_POSSIBLE_LETTER_POSITION - characterPosition));
+            }
+
+            char unShifterCharacter = (char)(unShiftedCharacterPosition);
+            unShiftedText.append(unShifterCharacter);
+        }
+
+        return unShiftedText.toString();
     }
 }

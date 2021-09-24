@@ -1,10 +1,11 @@
 package ca.ulaval.glo3100.friedman;
 
 import ca.ulaval.glo3100.console.Logger;
-import ca.ulaval.glo3100.utils.CharacterOccurrenceUtils;
+import ca.ulaval.glo3100.utils.IndexOfCoincidenceUtils;
 import ca.ulaval.glo3100.utils.ShiftedTextUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FriedmanKeyLengthFinder {
 
@@ -52,24 +53,10 @@ public class FriedmanKeyLengthFinder {
         List<Double> indexesOfCoincidence = new ArrayList<>();
 
         for (String subtext : subtexts) {
-            indexesOfCoincidence.add(calculateIndexOfCoincidence(subtext));
+            double indexOfCoincidence = IndexOfCoincidenceUtils.calculateIndexOfCoincidence(subtext);
+            indexesOfCoincidence.add(indexOfCoincidence);
         }
 
         return indexesOfCoincidence;
-    }
-
-    private static double calculateIndexOfCoincidence(String text) {
-        Collection<Integer> occurences = CharacterOccurrenceUtils.calculateOccurrences(text);
-        double indexOfCoincidence = 0;
-
-        // Sum of : n_1 * (n_1 - 1)
-        for (Integer occurrence : occurences) {
-            indexOfCoincidence += occurrence * (occurrence - 1);
-        }
-
-        // Divide by : n / (n - 1)
-        indexOfCoincidence = indexOfCoincidence / (text.length() * (text.length() - 1));
-
-        return indexOfCoincidence;
     }
 }
