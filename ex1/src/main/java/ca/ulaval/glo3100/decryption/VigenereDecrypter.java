@@ -8,6 +8,8 @@ import java.util.List;
 
 public class VigenereDecrypter {
 
+    private static final char ENGLISH_MOST_FREQUENT_LETTER = 'E';
+
     public static String decrypt(String cypherText, int keyLength) {
         Logger.logDebug("Decrypting cypher text");
 
@@ -18,9 +20,10 @@ public class VigenereDecrypter {
 
             char mostFrequentCharacter = CharacterOccurrenceUtils.findMostFrequentCharacter(subtext);
 
-            Logger.logDebug(String.format("--> Most frequent character : %s", mostFrequentCharacter));
+            int shift = mostFrequentCharacter - ENGLISH_MOST_FREQUENT_LETTER;
 
-            // TODO : Get shift size for most frequent letter (from "E")
+            Logger.logDebug(String.format("--> Most frequent character : %s (shift from '%s' : %d)", mostFrequentCharacter, ENGLISH_MOST_FREQUENT_LETTER, shift));
+
             // TODO : Un-shift each subtext
             // TODO : Assemble back plain text
         }
