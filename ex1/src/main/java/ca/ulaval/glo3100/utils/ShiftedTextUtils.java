@@ -5,6 +5,9 @@ import java.util.List;
 
 public class ShiftedTextUtils {
 
+    private static final int FIRST_POSSIBLE_LETTER_POSITION = 'A';
+    private static final int LAST_POSSIBLE_LETTER_POSITION = 'Z';
+
     /**
      * @param text text to be shifted into subtexts
      * @param keyLength length of cypher key
@@ -46,5 +49,31 @@ public class ShiftedTextUtils {
         }
 
         return text.toString();
+    }
+
+    // TODO : Add javadoc
+    public static String unShiftText(String text, int shift) {
+        StringBuilder unShiftedText = new StringBuilder();
+
+        for (char character : text.toCharArray()) {
+            unShiftedText.append(unShiftCharacter(character, shift));
+        }
+
+        return unShiftedText.toString();
+    }
+
+    // TODO : Add javadoc
+    private static char unShiftCharacter(char character, int shift) {
+        // TODO : See if this line is necessary
+        int characterPosition = character;
+        int unShiftedCharacterPosition = characterPosition - shift;
+
+        if (unShiftedCharacterPosition < FIRST_POSSIBLE_LETTER_POSITION) {
+            unShiftedCharacterPosition = (LAST_POSSIBLE_LETTER_POSITION + 1) - (shift - (characterPosition - FIRST_POSSIBLE_LETTER_POSITION));
+        } else if (unShiftedCharacterPosition > LAST_POSSIBLE_LETTER_POSITION) {
+            unShiftedCharacterPosition = FIRST_POSSIBLE_LETTER_POSITION + (shift - (LAST_POSSIBLE_LETTER_POSITION - characterPosition));
+        }
+
+        return (char)(unShiftedCharacterPosition);
     }
 }

@@ -1,8 +1,7 @@
 package ca.ulaval.glo3100.friedman;
 
 import ca.ulaval.glo3100.console.Logger;
-import ca.ulaval.glo3100.utils.CharacterOccurrenceUtils;
-import ca.ulaval.glo3100.utils.ShiftedTextUtils;
+import ca.ulaval.glo3100.utils.IndexOfCoincidenceUtils;
 
 import java.util.*;
 
@@ -13,6 +12,7 @@ public class FriedmanKeyLengthFinder {
     private static final int MIN_KEY_LENGTH = 1;
     private static final int MAX_KEY_LENGTH = 9;
 
+    // TODO : Add javadoc
     public static int findKeyLength(String cypherText) {
         Logger.logDebug("Finding key length using Friedman test");
 
@@ -22,7 +22,7 @@ public class FriedmanKeyLengthFinder {
         int closestKeyLength = MIN_KEY_LENGTH; // initial closest key length
 
         for (int keyLength = MIN_KEY_LENGTH; keyLength <= MAX_KEY_LENGTH; keyLength++) {
-            List<Double> indexesOfCoincidence = calculateIndexesOfCoincidence(cypherText, keyLength);
+            List<Double> indexesOfCoincidence = IndexOfCoincidenceUtils.calculateIndexesOfCoincidence(cypherText, keyLength);
             StringBuilder indexesBuilder = new StringBuilder();
             double average = 0;
 
@@ -45,31 +45,5 @@ public class FriedmanKeyLengthFinder {
         Logger.logDebug(String.format("Closest key length found : %d", closestKeyLength));
 
         return closestKeyLength;
-    }
-
-    private static List<Double> calculateIndexesOfCoincidence(String text, int keyLength) {
-        List<String> subtexts = ShiftedTextUtils.getSubtexts(text, keyLength);
-        List<Double> indexesOfCoincidence = new ArrayList<>();
-
-        for (String subtext : subtexts) {
-            indexesOfCoincidence.add(calculateIndexOfCoincidence(subtext));
-        }
-
-        return indexesOfCoincidence;
-    }
-
-    private static double calculateIndexOfCoincidence(String text) {
-        Collection<Integer> occurences = CharacterOccurrenceUtils.calculateOccurrences(text);
-        double indexOfCoincidence = 0;
-
-        // Sum of : n_1 * (n_1 - 1)
-        for (Integer occurrence : occurences) {
-            indexOfCoincidence += occurrence * (occurrence - 1);
-        }
-
-        // Divide by : n / (n - 1)
-        indexOfCoincidence = indexOfCoincidence / (text.length() * (text.length() - 1));
-
-        return indexOfCoincidence;
     }
 }
