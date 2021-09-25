@@ -16,9 +16,9 @@ public class VigenereDecrypter {
         Logger.logDebug("Decrypting cypher text");
 
         List<String> subtexts = ShiftedTextUtils.getSubtexts(cypherText, keyLength);
-        List<String> unshiftedSubtexts = new ArrayList<>();
 
-        // TODO : Calculate shift (via mutual index of coincidence)
+        // TODO : Review everything under here.
+        List<String> unShiftedSubtexts = new ArrayList<>();
 
         for (String subtext : subtexts) {
             Logger.logDebug(String.format("Calculating most frequent character for subtext : %s", subtext));
@@ -30,11 +30,20 @@ public class VigenereDecrypter {
             Logger.logDebug(String.format("--> Most frequent character : %s (shift from '%s' : %d)", mostFrequentCharacter, ENGLISH_MOST_FREQUENT_LETTER, shift));
 
             String unShiftedSubtext = ShiftedTextUtils.unShiftText(subtext, shift);
-            unshiftedSubtexts.add(unShiftedSubtext);
+            unShiftedSubtexts.add(unShiftedSubtext);
 
             Logger.logDebug(String.format("Un-shifted subtext : %s", unShiftedSubtext));
         }
 
-        return ShiftedTextUtils.getText(unshiftedSubtexts);
+        // TODO : Review everything over here.
+
+        // TODO : Calculate shift (via mutual index of coincidence) of Y1 to Y0, ..., Y1 to YK
+        //        Make sure if key length = 1 it still works
+        //        See next TODOs
+        // TODO : Calculate scalar products of each possible shifts of Y1 to Y0
+        // TODO : Find maximal scalar product, that is the shift
+        // TODO : Do that for each subtexts, n > 1
+
+        return ShiftedTextUtils.getText(unShiftedSubtexts);
     }
 }

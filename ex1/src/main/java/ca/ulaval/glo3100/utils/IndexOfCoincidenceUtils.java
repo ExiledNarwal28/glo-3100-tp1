@@ -5,8 +5,7 @@ import java.util.*;
 public class IndexOfCoincidenceUtils {
 
     // TODO : Add javadoc
-    public static List<Double> calculateIndexesOfCoincidence(String text, int keyLength) {
-        List<String> subtexts = ShiftedTextUtils.getSubtexts(text, keyLength);
+    public static List<Double> calculateIndexesOfCoincidence(List<String> subtexts) {
         List<Double> indexesOfCoincidence = new ArrayList<>();
 
         for (String subtext : subtexts) {
