@@ -5,6 +5,11 @@ import java.util.List;
 
 public class ShiftedTextUtils {
 
+    /**
+     * @param text text to be shifted into subtexts
+     * @param keyLength length of cypher key
+     * @return list of shifted subtexts
+     */
     public static List<String> getSubtexts(String text, int keyLength) {
         List<String> subtexts = new ArrayList<>();
 
@@ -21,6 +26,10 @@ public class ShiftedTextUtils {
         return subtexts;
     }
 
+    /**
+     * @param subtexts list of each shifted subtexts
+     * @return original text
+     */
     public static String getText(List<String> subtexts) {
         String joinedSubtexts = String.join("", subtexts);
         StringBuilder text = new StringBuilder();
