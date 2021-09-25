@@ -2,48 +2,50 @@ package ca.ulaval.glo3100.decryption;
 
 import ca.ulaval.glo3100.console.Logger;
 import ca.ulaval.glo3100.utils.CharacterOccurrenceUtils;
+import ca.ulaval.glo3100.utils.IndexOfCoincidenceUtils;
 import ca.ulaval.glo3100.utils.ShiftedTextUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class VigenereDecrypter {
 
-    private static final char ENGLISH_MOST_FREQUENT_LETTER = 'E';
+    private static final int MAX_SHIFT = 25;
 
     // TODO : Add javadoc
     public static String decrypt(String cypherText, int keyLength) {
         Logger.logDebug("Decrypting cypher text");
 
         List<String> subtexts = ShiftedTextUtils.getSubtexts(cypherText, keyLength);
-
-        // TODO : Review everything under here.
-        List<String> unShiftedSubtexts = new ArrayList<>();
+        List<String> shiftedSubtexts = new ArrayList<>();
 
         for (String subtext : subtexts) {
-            Logger.logDebug(String.format("Calculating most frequent character for subtext : %s", subtext));
+            Logger.logDebug(String.format("Calculating mutual index of coincidence for subtext : %s", subtext));
 
-            char mostFrequentCharacter = CharacterOccurrenceUtils.findMostFrequentCharacter(subtext);
+            List<String> possibleShiftedSubtexts = new ArrayList<>();
 
-            int shift = mostFrequentCharacter - ENGLISH_MOST_FREQUENT_LETTER;
+            for (int shift = 0; shift <= MAX_SHIFT; shift++) {
+                possibleShiftedSubtexts.add((ShiftedTextUtils.shiftText(subtext, shift)));
+            }
 
-            Logger.logDebug(String.format("--> Most frequent character : %s (shift from '%s' : %d)", mostFrequentCharacter, ENGLISH_MOST_FREQUENT_LETTER, shift));
+            // TODO : This uses indexes of coincidence, but not mutually
+            Map<String, Double> indexesOfCoincidence = IndexOfCoincidenceUtils.buildMapOfIndexesOfCoincidence(possibleShiftedSubtexts);
 
-            String unShiftedSubtext = ShiftedTextUtils.unShiftText(subtext, shift);
-            unShiftedSubtexts.add(unShiftedSubtext);
+            // Initial values
+            String shiftedSubtext = subtext;
+            double highestIndexOfCoincidence = 0;
 
-            Logger.logDebug(String.format("Un-shifted subtext : %s", unShiftedSubtext));
+            for (Map.Entry<String, Double> entry : indexesOfCoincidence.entrySet()) {
+                if (entry.getValue() > highestIndexOfCoincidence) {
+                    shiftedSubtext = entry.getKey();
+                    highestIndexOfCoincidence = entry.getValue();
+                }
+            }
+
+            shiftedSubtexts.add(shiftedSubtext);
         }
 
-        // TODO : Review everything over here.
-
-        // TODO : Calculate shift (via mutual index of coincidence) of Y1 to Y0, ..., Y1 to YK
-        //        Make sure if key length = 1 it still works
-        //        See next TODOs
-        // TODO : Calculate scalar products of each possible shifts of Y1 to Y0
-        // TODO : Find maximal scalar product, that is the shift
-        // TODO : Do that for each subtexts, n > 1
-
-        return ShiftedTextUtils.getText(unShiftedSubtexts);
+        return ShiftedTextUtils.getText(shiftedSubtexts);
     }
 }

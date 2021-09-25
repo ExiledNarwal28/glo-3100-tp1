@@ -52,28 +52,28 @@ public class ShiftedTextUtils {
     }
 
     // TODO : Add javadoc
-    public static String unShiftText(String text, int shift) {
-        StringBuilder unShiftedText = new StringBuilder();
+    public static String shiftText(String text, int shift) {
+        StringBuilder shiftedText = new StringBuilder();
 
         for (char character : text.toCharArray()) {
-            unShiftedText.append(unShiftCharacter(character, shift));
+            shiftedText.append(shiftCharacter(character, shift));
         }
 
-        return unShiftedText.toString();
+        return shiftedText.toString();
     }
 
     // TODO : Add javadoc
-    private static char unShiftCharacter(char character, int shift) {
+    private static char shiftCharacter(char character, int shift) {
         // TODO : See if this line is necessary
         int characterPosition = character;
-        int unShiftedCharacterPosition = characterPosition - shift;
+        int shiftedCharacterPosition = characterPosition - shift;
 
-        if (unShiftedCharacterPosition < FIRST_POSSIBLE_LETTER_POSITION) {
-            unShiftedCharacterPosition = (LAST_POSSIBLE_LETTER_POSITION + 1) - (shift - (characterPosition - FIRST_POSSIBLE_LETTER_POSITION));
-        } else if (unShiftedCharacterPosition > LAST_POSSIBLE_LETTER_POSITION) {
-            unShiftedCharacterPosition = FIRST_POSSIBLE_LETTER_POSITION + (shift - (LAST_POSSIBLE_LETTER_POSITION - characterPosition));
+        if (shiftedCharacterPosition < FIRST_POSSIBLE_LETTER_POSITION) {
+            shiftedCharacterPosition = (LAST_POSSIBLE_LETTER_POSITION + 1) - (shift - (characterPosition - FIRST_POSSIBLE_LETTER_POSITION));
+        } else if (shiftedCharacterPosition > LAST_POSSIBLE_LETTER_POSITION) {
+            shiftedCharacterPosition = FIRST_POSSIBLE_LETTER_POSITION + (shift - (LAST_POSSIBLE_LETTER_POSITION - characterPosition));
         }
 
-        return (char)(unShiftedCharacterPosition);
+        return (char)(shiftedCharacterPosition);
     }
 }
