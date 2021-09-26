@@ -86,14 +86,12 @@ public class ShiftedTextUtils {
      * @return shifted character
      */
     private static char shiftCharacter(char character, int shift) {
-        // TODO : See if this line is necessary
-        int characterPosition = character;
-        int shiftedCharacterPosition = characterPosition - shift;
+        int shiftedCharacterPosition = (int) character - shift;
 
         if (shiftedCharacterPosition < FIRST_POSSIBLE_LETTER_POSITION) {
-            shiftedCharacterPosition = (LAST_POSSIBLE_LETTER_POSITION + 1) - (shift - (characterPosition - FIRST_POSSIBLE_LETTER_POSITION));
+            shiftedCharacterPosition = (LAST_POSSIBLE_LETTER_POSITION + 1) - (shift - ((int) character - FIRST_POSSIBLE_LETTER_POSITION));
         } else if (shiftedCharacterPosition > LAST_POSSIBLE_LETTER_POSITION) {
-            shiftedCharacterPosition = FIRST_POSSIBLE_LETTER_POSITION + (shift - (LAST_POSSIBLE_LETTER_POSITION - characterPosition));
+            shiftedCharacterPosition = FIRST_POSSIBLE_LETTER_POSITION + (shift - (LAST_POSSIBLE_LETTER_POSITION - (int) character));
         }
 
         return (char)(shiftedCharacterPosition);
