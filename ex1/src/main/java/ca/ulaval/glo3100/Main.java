@@ -44,5 +44,6 @@ public class Main {
         Logger.logInfo("You need to enter one of the following args :");
         Logger.logInfo(String.format("  %s : Exercise 1.a : Calculate key length using Friedman test", ARG_FRIEDMAN));
         Logger.logInfo(String.format("  %s : Exercise 1.b : Decrypt ciphertext", ARG_DECRYPT));
+        Logger.logInfo(String.format("As a second arg, you can enter %s, which will make the application more verbose.", ARG_DEBUG));
     }
 }

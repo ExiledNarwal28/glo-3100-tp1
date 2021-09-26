@@ -38,12 +38,18 @@ public class CharacterOccurrenceUtils {
             0.00074
     ));
 
-    // TODO : Add javadoc
+    /**
+     * @param text text to calculate occurrences from
+     * @return list of each number of occurrences for each letter in given text
+     */
     public static Collection<Integer> calculateOccurrences(String text) {
         return getMapOfOccurrences(text).values();
     }
 
-    // TODO : Add javadoc
+    /**
+     * @param text text to calculate distribution from
+     * @return map of each character and their respective distribution in given text
+     */
     public static List<Double> getLettersDistribution(String text) {
         List<Double> distribution = new ArrayList<>();
         Map<Character, Integer> occurences = getMapOfOccurrences(text);
@@ -61,12 +67,17 @@ public class CharacterOccurrenceUtils {
         return distribution;
     }
 
-    // TODO : Add javadoc
+    /**
+     * @return distribution of letters in the english language
+     */
     public static List<Double> getEnglishLettersDistribution() {
         return ENGLISH_LETTERS_DISTRIBUTION;
     }
 
-    // TODO : Add javadoc
+    /**
+     * @param text text to calculate map of occurrences from
+     * @return map of each character and their respective number of occurrences in given text
+     */
     private static Map<Character, Integer> getMapOfOccurrences(String text) {
         Map<Character, Integer> occurrences = new HashMap<>();
 

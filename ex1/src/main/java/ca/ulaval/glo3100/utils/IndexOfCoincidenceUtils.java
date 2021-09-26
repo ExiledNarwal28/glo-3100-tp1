@@ -4,7 +4,10 @@ import java.util.*;
 
 public class IndexOfCoincidenceUtils {
 
-    // TODO : Add javadoc
+    /**
+     * @param subtexts list of subtexts to calculate each index of coincidences
+     * @return list of indexes of coincidence for given subtexts
+     */
     public static List<Double> calculateIndexesOfCoincidence(List<String> subtexts) {
         List<Double> indexesOfCoincidence = new ArrayList<>();
 
@@ -15,7 +18,10 @@ public class IndexOfCoincidenceUtils {
         return indexesOfCoincidence;
     }
 
-    // TODO : Add javadoc
+    /**
+     * @param text text to calculate index of coincidences
+     * @return Index of coincidence for given text
+     */
     private static double calculateIndexOfCoincidence(String text) {
         Collection<Integer> occurences = CharacterOccurrenceUtils.calculateOccurrences(text);
         double indexOfCoincidence = 0;

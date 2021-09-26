@@ -7,15 +7,18 @@ import ca.ulaval.glo3100.utils.VectorUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class VigenereDecrypter {
 
     private static final int MIN_SHIFT = 0;
     private static final int MAX_SHIFT = 25;
 
+    /**
+     * @param cypherText cypher text to decrypt
+     * @param keyLength key length of given cypher text
+     * @return plain text
+     */
     // TODO : Add debug logs
-    // TODO : Add javadoc
     public static String decrypt(String cypherText, int keyLength) {
         Logger.logDebug("Decrypting cypher text");
 
@@ -33,7 +36,6 @@ public class VigenereDecrypter {
 
             for(int possibleShift = MIN_SHIFT; possibleShift <= MAX_SHIFT; possibleShift++) {
                 String possibleShiftedSubtext = ShiftedTextUtils.shiftText(subtext, possibleShift);
-                // TODO : Would a List<Double> be enough?
                 List<Double> distribution = CharacterOccurrenceUtils.getLettersDistribution(possibleShiftedSubtext);
                 List<Double> englishDistribution = CharacterOccurrenceUtils.getEnglishLettersDistribution();
 
@@ -51,7 +53,7 @@ public class VigenereDecrypter {
         }
 
         String key = ShiftedTextUtils.getTextFromShifts(shifts);
-        Logger.logDebug(String.format("Key : %s", key));
+        Logger.logInfo(String.format("Key : %s", key));
 
         return ShiftedTextUtils.getText(shiftedSubtexts);
     }

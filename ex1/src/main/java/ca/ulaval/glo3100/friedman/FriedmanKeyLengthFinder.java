@@ -13,7 +13,10 @@ public class FriedmanKeyLengthFinder {
     private static final int MIN_KEY_LENGTH = 1;
     private static final int MAX_KEY_LENGTH = 9;
 
-    // TODO : Add javadoc
+    /**
+     * @param cypherText cypher text to get key length from
+     * @return key length of given cypher text
+     */
     public static int findKeyLength(String cypherText) {
         Logger.logDebug("Finding key length using Friedman test");
 
@@ -44,7 +47,7 @@ public class FriedmanKeyLengthFinder {
             }
         }
 
-        Logger.logDebug(String.format("Closest key length found : %d", closestKeyLength));
+        Logger.logInfo(String.format("Key length : %d", closestKeyLength));
 
         return closestKeyLength;
     }
