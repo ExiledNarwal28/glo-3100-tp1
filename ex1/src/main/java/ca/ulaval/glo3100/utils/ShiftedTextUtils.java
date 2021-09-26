@@ -52,6 +52,17 @@ public class ShiftedTextUtils {
     }
 
     // TODO : Add javadoc
+    public static String getTextFromShifts(List<Integer> shifts) {
+        StringBuilder text = new StringBuilder();
+
+        for (Integer shift : shifts) {
+            text.append((char) (FIRST_POSSIBLE_LETTER_POSITION + shift));
+        }
+
+        return text.toString();
+    }
+
+    // TODO : Add javadoc
     public static String shiftText(String text, int shift) {
         StringBuilder shiftedText = new StringBuilder();
 
