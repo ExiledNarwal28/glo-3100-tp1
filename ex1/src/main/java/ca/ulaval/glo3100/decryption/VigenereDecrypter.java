@@ -18,7 +18,6 @@ public class VigenereDecrypter {
      * @param keyLength key length of given cypher text
      * @return plain text
      */
-    // TODO : Add debug logs
     public static String decrypt(String cypherText, int keyLength) {
         Logger.logDebug("Decrypting cypher text");
 
@@ -47,6 +46,9 @@ public class VigenereDecrypter {
                     highestScalarProduct = scalarProduct;
                 }
             }
+
+            Logger.logDebug(String.format("Most probable shift for subtext : %d", shift));
+            Logger.logDebug(String.format("Shifted subtext : %s", shiftedSubtext));
 
             shiftedSubtexts.add(shiftedSubtext);
             shifts.add(shift);
