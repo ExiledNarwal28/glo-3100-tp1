@@ -4,7 +4,11 @@ import java.util.*;
 
 public class VectorUtils {
 
-    // TODO : Add javadoc
+    /**
+     * @param firstVector First vector to calculate scalar product
+     * @param secondVector Second vector to calculate scalar product
+     * @return scalar product of two given vectors
+     */
     public static Double getScalarProduct(List<Double> firstVector, List<Double> secondVector) {
         if (firstVector.size() != secondVector.size()) {
             throw new IllegalArgumentException("Vectors must be of the same size");

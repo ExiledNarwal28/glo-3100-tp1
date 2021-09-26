@@ -5,17 +5,6 @@ import java.util.*;
 public class IndexOfCoincidenceUtils {
 
     // TODO : Add javadoc
-    public static Map<String, Double> buildMapOfIndexesOfCoincidence(List<String> subtexts) {
-        Map<String, Double> indexesOfCoincidence = new HashMap<>();
-
-        for (String subtext : subtexts) {
-            indexesOfCoincidence.put(subtext, calculateIndexOfCoincidence(subtext));
-        }
-
-        return indexesOfCoincidence;
-    }
-
-    // TODO : Add javadoc
     public static List<Double> calculateIndexesOfCoincidence(List<String> subtexts) {
         List<Double> indexesOfCoincidence = new ArrayList<>();
 

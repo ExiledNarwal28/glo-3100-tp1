@@ -51,7 +51,10 @@ public class ShiftedTextUtils {
         return text.toString();
     }
 
-    // TODO : Add javadoc
+    /**
+     * @param shifts list of shifts from first possible letter
+     * @return assembled string from given shifts
+     */
     public static String getTextFromShifts(List<Integer> shifts) {
         StringBuilder text = new StringBuilder();
 
@@ -62,7 +65,11 @@ public class ShiftedTextUtils {
         return text.toString();
     }
 
-    // TODO : Add javadoc
+    /**
+     * @param text original text
+     * @param shift shift from first possible letter to apply to each letter of the text
+     * @return shifted text
+     */
     public static String shiftText(String text, int shift) {
         StringBuilder shiftedText = new StringBuilder();
 
@@ -73,7 +80,11 @@ public class ShiftedTextUtils {
         return shiftedText.toString();
     }
 
-    // TODO : Add javadoc
+    /**
+     * @param character original character
+     * @param shift shift from first possible letter to apply to character
+     * @return shifted character
+     */
     private static char shiftCharacter(char character, int shift) {
         // TODO : See if this line is necessary
         int characterPosition = character;
