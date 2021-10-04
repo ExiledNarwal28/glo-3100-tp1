@@ -22,8 +22,9 @@ public class FriedmanKeyLengthFinder {
 
         Logger.logDebug(String.format("Given cypher text : %s", cypherText));
 
-        double closestDistance = Double.MAX_VALUE; // initial closest distance
-        int closestKeyLength = MIN_KEY_LENGTH; // initial closest key length
+        // Initial values
+        double closestDistance = Double.MAX_VALUE;
+        int closestKeyLength = MIN_KEY_LENGTH;
 
         for (int keyLength = MIN_KEY_LENGTH; keyLength <= MAX_KEY_LENGTH; keyLength++) {
             List<String> subtexts = ShiftedTextUtils.getSubtexts(cypherText, keyLength);
