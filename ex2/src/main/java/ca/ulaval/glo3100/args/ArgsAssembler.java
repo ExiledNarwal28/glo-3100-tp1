@@ -13,7 +13,7 @@ public class ArgsAssembler {
         // Default values
         String msg = null;
         String key = null;
-        String op = null;
+        Operation operation = null;
         String iv = null;
         Mode mode = null;
         int r = 0;
@@ -27,7 +27,7 @@ public class ArgsAssembler {
                     key = args[i + 1];
                     break;
                 case opArg:
-                    op = args[i + 1];
+                    operation = Operation.get(args[i + 1]);
                     break;
                 case modeArg:
                     mode = Mode.get(args[i + 1]);
@@ -43,6 +43,6 @@ public class ArgsAssembler {
             }
         }
 
-        return new Args(msg, key, op, iv, mode, r);
+        return new Args(msg, key, operation, iv, mode, r);
     }
 }
