@@ -123,7 +123,17 @@ public class OperationService {
 
     // TODO : Move to specialized class
     private static String getText(long bytes) {
-        return Long.toBinaryString(bytes);
+        int byteLength = 8;
+        String text = Long.toBinaryString(bytes);
+        int neededPadding = byteLength - text.length();
+
+        if (neededPadding > 0) {
+            String padding = new String(new char[neededPadding]).replace('\0', '0');
+
+            return padding + text;
+        } else {
+            return text;
+        }
     }
 
     // TODO : Move to specialized class
