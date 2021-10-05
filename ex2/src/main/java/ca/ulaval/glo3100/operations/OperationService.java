@@ -16,6 +16,7 @@ public class OperationService {
 
     private static final int SUBSTRING_LENGTH_FOR_ECB = 8;
     private static final int SUBSTRING_LENGTH_FOR_CBC = 8;
+    private static final int SUBSTRING_LENGTH_FOR_CTR = 8;
     // TODO : Maybe we should move XOR to EncryptionUtils
     private static final Encryption<Long> XOR = ((firstBytes, secondBytes) -> firstBytes ^ secondBytes);
 
@@ -30,7 +31,7 @@ public class OperationService {
             case CBC:
                 return cbc(args.message, args.key, args.iv, args.operation);
             case CTR:
-                return ctr();
+                return ctr(args.message, args.key, args.iv);
             case OFB:
                 return ofb();
             case CFB:
@@ -104,8 +105,32 @@ public class OperationService {
         return "";
     }
 
-    // TODO : Complete CTR
-    private static String ctr() {
-        return "";
+    // TODO : Fix CTR
+    // TODO : Add javadocs
+    private static String ctr(String message, String key, String iv) {
+        List<String> substrings = getSubstrings(message, SUBSTRING_LENGTH_FOR_CTR);
+        List<Long> substringsBytes = getBytes(substrings);
+        long keyByte = getByte(key);
+
+        List<Long> counters = new ArrayList<>();
+        counters.add(getByte(iv));
+
+        List<Long> foundBytes = new ArrayList<>();
+
+        for (long substringsByte : substringsBytes) {
+            long lastCounter = counters.get(counters.size() - 1);
+            // TODO : Not sure
+            long counter = lastCounter + 1L;
+            counters.add(counter);
+
+            long encryptedCounter = applyEncryption(counter, keyByte, XOR);
+            long foundByte = applyEncryption(encryptedCounter, substringsByte, XOR);
+
+            foundBytes.add(foundByte);
+        }
+
+        List<String> foundMessageSubstrings = getTexts(foundBytes);
+
+        return concatStrings(foundMessageSubstrings);
     }
 }
