@@ -39,9 +39,9 @@ public class OperationService {
 
     // TODO : Move to specialized class
     private static final Operation<Long> XOR = ((firstBytes, secondBytes) -> firstBytes ^ secondBytes);
-    private static final Operation<Long> OR = ((firstBytes, secondBytes) -> firstBytes & secondBytes);
+    // TODO : Remove if not needed
+    private static final Operation<Long> AND = ((firstBytes, secondBytes) -> firstBytes & secondBytes);
 
-    // TODO : Something doesn't work with bytes conversion / XOR (should be shifted by two bytes)
     private static String ecb(String message, String key) {
         // TODO : Opposite for decryption
         // TODO : Move 8 to static final
@@ -51,6 +51,7 @@ public class OperationService {
         List<Long> encryptedBytes = applyKey(substringsBytes, keyBytes, XOR);
         List<String> encryptedMessageSubtrings = getTexts(encryptedBytes);
 
+        // TODO : When last substring is not 8 chars, shift all substrings
         return concatTexts(encryptedMessageSubtrings);
     }
 
@@ -64,7 +65,13 @@ public class OperationService {
 
     // TODO : Move to specialized class
     private static long applyKey(long textBytes, long keyBytes, Operation<Long> operation) {
-        return operation.operate(textBytes, keyBytes);
+        Logger.logDebug(String.format("Applying key (%s) to text : %s", getText(keyBytes), getText(textBytes)));
+
+        long encryptedText = operation.operate(textBytes, keyBytes);
+
+        Logger.logDebug(String.format("  -> : %s", getText(encryptedText)));
+
+        return encryptedText;
     }
 
     // TODO : Move to specialized class
