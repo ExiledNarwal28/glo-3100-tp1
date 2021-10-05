@@ -49,10 +49,9 @@ public class OperationService {
         List<Long> substringsBytes = getBytes(substrings);
         long keyBytes = getByte(key);
         List<Long> encryptedBytes = applyKey(substringsBytes, keyBytes, XOR);
-        List<String> encryptedMessageSubtrings = getTexts(encryptedBytes);
+        List<String> encryptedMessageSubstrings = getTexts(encryptedBytes);
 
-        // TODO : When last substring is not 8 chars, shift all substrings
-        return concatTexts(encryptedMessageSubtrings);
+        return concatTexts(encryptedMessageSubstrings);
     }
 
     // TODO : Move to specialized class
@@ -126,6 +125,41 @@ public class OperationService {
     private static String getText(long bytes) {
         return Long.toBinaryString(bytes);
     }
+
+    // TODO : Move to specialized class
+    // TODO : Remove this method, probably useless
+    // TODO : This will need to be generalized, not all operations need substrings of 8 length
+    /*
+    private static List<String> applyPadding(List<String> texts) {
+        if (texts.size() == 1) {
+            return texts;
+        }
+
+        int substringsLength = 8;
+
+        String lastString = texts.get(texts.size() - 1);
+        int neededPadding = substringsLength % lastString.length();
+
+        Logger.logDebug(String.format("Needed padding : %d",neededPadding));
+
+        if (neededPadding > 0) {
+            String padding = new String(new char[neededPadding]).replace('\0', '0');
+            List<String> paddedTexts = new ArrayList<>();
+
+            for (String text : texts) {
+                String newPadding = text.substring(text.length() - neededPadding - 1);
+
+                paddedTexts.add(padding + text.substring(0, text.length() - neededPadding + 1));
+
+                padding = newPadding;
+            }
+
+            return paddedTexts;
+        } else {
+            return texts;
+        }
+    }
+    */
 
     // TODO : Move to specialized class
     private static String concatTexts(List<String> texts) {
