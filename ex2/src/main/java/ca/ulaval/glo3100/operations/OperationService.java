@@ -12,6 +12,7 @@ import static ca.ulaval.glo3100.utils.StringUtils.getSubstrings;
 
 public class OperationService {
 
+    private static final int SUBSTRING_LENGTH_FOR_ECB = 8;
     private static final Operation<Long> XOR = ((firstBytes, secondBytes) -> firstBytes ^ secondBytes);
 
     public static String execute(Args args) {
@@ -35,7 +36,6 @@ public class OperationService {
         }
     }
 
-
     /**
      * Encrypts or decrypts message using ECB operation
      * ECB has the same encryption or decryption : a simple XOR operation on each byte
@@ -44,8 +44,7 @@ public class OperationService {
      * @return Encrypted or decrypted message
      */
     private static String ecb(String message, String key) {
-        // TODO : Move 8 to static final
-        List<String> substrings = getSubstrings(message, 8);
+        List<String> substrings = getSubstrings(message, SUBSTRING_LENGTH_FOR_ECB);
         List<Long> substringsBytes = getBytes(substrings);
         long keyBytes = getByte(key);
         List<Long> encryptedBytes = applyKey(substringsBytes, keyBytes, XOR);

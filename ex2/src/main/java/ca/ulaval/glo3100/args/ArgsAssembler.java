@@ -2,12 +2,12 @@ package ca.ulaval.glo3100.args;
 
 public class ArgsAssembler {
 
-    private static final String msgArg = "-msg";
-    private static final String keyArg = "-key";
-    private static final String opArg = "-op";
-    private static final String modeArg = "-mode";
-    private static final String ivArg = "-iv";
-    private static final String rArg = "-r";
+    private static final String MSG_ARG = "-msg";
+    private static final String KEY_ARG = "-key";
+    private static final String OP_ARG = "-op";
+    private static final String MODE_ARG = "-mode";
+    private static final String IV_ARG = "-iv";
+    private static final String R_ARG = "-r";
 
     public static Args assemble(String[] args) {
         // Default values
@@ -20,22 +20,22 @@ public class ArgsAssembler {
 
         for (int i = 0; i < args.length; i = i + 2) {
             switch (args[i]){
-                case msgArg:
+                case MSG_ARG:
                     message = args[i + 1];
                     break;
-                case keyArg:
+                case KEY_ARG:
                     key = args[i + 1];
                     break;
-                case opArg:
+                case OP_ARG:
                     operation = Operation.get(args[i + 1]);
                     break;
-                case modeArg:
+                case MODE_ARG:
                     mode = Mode.get(args[i + 1]);
                     break;
-                case ivArg:
+                case IV_ARG:
                     iv = args[i + 1];
                     break;
-                case rArg:
+                case R_ARG:
                     r = Integer.parseInt(args[i + 1]);
                     break;
                 default:
