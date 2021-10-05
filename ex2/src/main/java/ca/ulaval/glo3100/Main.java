@@ -8,10 +8,13 @@ import ca.ulaval.glo3100.operations.OperationService;
 public class Main {
 
     public static void main(String[] args) {
+        // TODO : Remove this
+        Logger.isDebugging = true;
+
         Args assembledArgs = ArgsAssembler.assemble(args);
 
         String result = OperationService.execute(assembledArgs);
 
-        Logger.log(String.format("%s, result is : %s", assembledArgs.mode.toString(), result));
+        Logger.logInfo(String.format("%s, result is : %s", assembledArgs.mode.toString(), result));
     }
 }

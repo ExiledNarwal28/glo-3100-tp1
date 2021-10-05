@@ -1,6 +1,7 @@
 package ca.ulaval.glo3100.operations;
 
 import ca.ulaval.glo3100.args.Args;
+import ca.ulaval.glo3100.console.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,9 +38,10 @@ public class OperationService {
     }
 
     // TODO : Move to specialized class
-    private static final Operation<Long> XOR = ((firstBytes, secondBytes) -> firstBytes & secondBytes);
+    private static final Operation<Long> XOR = ((firstBytes, secondBytes) -> firstBytes ^ secondBytes);
+    private static final Operation<Long> OR = ((firstBytes, secondBytes) -> firstBytes & secondBytes);
 
-    // TODO : Something doesn't work with bytes conversion / XOR
+    // TODO : Something doesn't work with bytes conversion / XOR (should be shifted by two bytes)
     private static String ecb(String message, String key) {
         // TODO : Opposite for decryption
         // TODO : Move 8 to static final
@@ -48,9 +50,8 @@ public class OperationService {
         long keyBytes = getByte(key);
         List<Long> encryptedBytes = applyKey(substringsBytes, keyBytes, XOR);
         List<String> encryptedMessageSubtrings = getTexts(encryptedBytes);
-        String encryptedMessage = concatSubstrings(encryptedMessageSubtrings);
 
-        return encryptedMessage;
+        return concatTexts(encryptedMessageSubtrings);
     }
 
     // TODO : Move to specialized class
@@ -68,11 +69,15 @@ public class OperationService {
 
     // TODO : Move to specialized class
     private static List<String> getSubstrings(String text, int substringLength) {
+        Logger.logDebug(String.format("Text to get substrings : %s", text));
+
         List<String> substrings = new ArrayList<>();
 
-        for (int i = 0; i < text.length(); i++) {
+        for (int i = 0; i < text.length(); i += substringLength) {
             substrings.add(getSubstring(text, i, substringLength));
         }
+
+        Logger.logDebug(String.format("  -> %s", concatTexts(substrings)));
 
         return substrings;
     }
@@ -84,10 +89,16 @@ public class OperationService {
 
     // TODO : Move to specialized class
     private static List<Long> getBytes(List<String> texts) {
-        return texts
+        Logger.logDebug(String.format("Texts to get bytes : %s", concatTexts(texts)));
+
+        List<Long> bytes = texts
                 .stream()
                 .map(OperationService::getByte)
                 .collect(Collectors.toList());
+
+        Logger.logDebug(String.format("  -> %s", concatTexts(getTexts(bytes))));
+
+        return bytes;
     }
 
     // TODO : Move to specialized class
@@ -110,7 +121,7 @@ public class OperationService {
     }
 
     // TODO : Move to specialized class
-    private static String concatSubstrings(List<String> texts) {
+    private static String concatTexts(List<String> texts) {
         return String.join(" ", texts);
     }
 
