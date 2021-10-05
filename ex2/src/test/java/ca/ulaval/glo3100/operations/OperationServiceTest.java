@@ -23,7 +23,7 @@ public class OperationServiceTest {
 
         String result = OperationService.execute(args);
 
-        assertEquals(result, expectedResult);
+        assertEquals(expectedResult, result);
     }
 
     @Test
@@ -34,7 +34,7 @@ public class OperationServiceTest {
 
         String result = OperationService.execute(args);
 
-        assertEquals(result, expectedResult);
+        assertEquals(expectedResult, result);
     }
 
     @Test
@@ -45,7 +45,7 @@ public class OperationServiceTest {
 
         String result = OperationService.execute(args);
 
-        assertEquals(result, expectedResult);
+        assertEquals(expectedResult, result);
     }
 
     @Test
@@ -56,7 +56,7 @@ public class OperationServiceTest {
 
         String result = OperationService.execute(args);
 
-        assertEquals(result, expectedResult);
+        assertEquals(expectedResult, result);
     }
 
     @Test
@@ -67,7 +67,7 @@ public class OperationServiceTest {
 
         String result = OperationService.execute(args);
 
-        assertEquals(result, expectedResult);
+        assertEquals(expectedResult, result);
     }
 
     @Test
@@ -78,7 +78,7 @@ public class OperationServiceTest {
 
         String result = OperationService.execute(args);
 
-        assertEquals(result, expectedResult);
+        assertEquals(expectedResult, result);
     }
 
     @Test
@@ -89,7 +89,7 @@ public class OperationServiceTest {
 
         String result = OperationService.execute(args);
 
-        assertEquals(result, expectedResult);
+        assertEquals(expectedResult, result);
     }
 
     @Test
@@ -100,7 +100,7 @@ public class OperationServiceTest {
 
         String result = OperationService.execute(args);
 
-        assertEquals(result, expectedResult);
+        assertEquals(expectedResult, result);
     }
 
     @Test
@@ -111,7 +111,7 @@ public class OperationServiceTest {
 
         String result = OperationService.execute(args);
 
-        assertEquals(result, expectedResult);
+        assertEquals(expectedResult, result);
     }
 
     @Test
@@ -122,6 +122,6 @@ public class OperationServiceTest {
 
         String result = OperationService.execute(args);
 
-        assertEquals(result, expectedResult);
+        assertEquals(expectedResult, result);
     }
 }

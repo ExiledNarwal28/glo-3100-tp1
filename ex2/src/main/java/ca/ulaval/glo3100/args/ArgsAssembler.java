@@ -11,7 +11,7 @@ public class ArgsAssembler {
 
     public static Args assemble(String[] args) {
         // Default values
-        String msg = null;
+        String message = null;
         String key = null;
         Operation operation = null;
         String iv = null;
@@ -21,7 +21,7 @@ public class ArgsAssembler {
         for (int i = 0; i < args.length; i = i + 2) {
             switch (args[i]){
                 case msgArg:
-                    msg = args[i + 1];
+                    message = args[i + 1];
                     break;
                 case keyArg:
                     key = args[i + 1];
@@ -43,6 +43,6 @@ public class ArgsAssembler {
             }
         }
 
-        return new Args(msg, key, operation, iv, mode, r);
+        return new Args(message, key, operation, iv, mode, r);
     }
 }
