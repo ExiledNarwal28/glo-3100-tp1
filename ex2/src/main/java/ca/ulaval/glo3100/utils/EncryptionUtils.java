@@ -7,19 +7,19 @@ import java.util.stream.Collectors;
 
 import static ca.ulaval.glo3100.utils.ByteUtils.getText;
 
-public class OperationUtils {
+public class EncryptionUtils {
 
-    public static List<Long> applyKey(List<Long> textsBytes, long keyBytes, Operation<Long> operation) {
+    public static List<Long> applyEncryption(List<Long> textsBytes, long keyBytes, Encryption<Long> encryption) {
         return textsBytes
                 .stream()
-                .map(textBytes -> applyKey(textBytes, keyBytes, operation))
+                .map(textBytes -> applyEncryption(textBytes, keyBytes, encryption))
                 .collect(Collectors.toList());
     }
 
-    public static long applyKey(long textBytes, long keyBytes, Operation<Long> operation) {
+    public static long applyEncryption(long textBytes, long keyBytes, Encryption<Long> encryption) {
         Logger.logDebug(String.format("Applying key (%s) to text : %s", getText(keyBytes), getText(textBytes)));
 
-        long encryptedText = operation.operate(textBytes, keyBytes);
+        long encryptedText = encryption.encrypt(textBytes, keyBytes);
 
         Logger.logDebug(String.format("  -> : %s", getText(encryptedText)));
 
