@@ -16,10 +16,10 @@ public class EncryptionUtils {
                 .collect(Collectors.toList());
     }
 
-    public static long applyEncryption(long textBytes, long keyBytes, Encryption<Long> encryption) {
-        Logger.logDebug(String.format("Applying key (%s) to text : %s", getText(keyBytes), getText(textBytes)));
+    public static long applyEncryption(long textByte, long keyByte, Encryption<Long> encryption) {
+        Logger.logDebug(String.format("Applying key (%s) to text : %s", getText(keyByte), getText(textByte)));
 
-        long encryptedText = encryption.encrypt(textBytes, keyBytes);
+        long encryptedText = encryption.encrypt(textByte, keyByte);
 
         Logger.logDebug(String.format("  -> : %s", getText(encryptedText)));
 

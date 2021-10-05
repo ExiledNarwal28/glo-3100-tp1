@@ -50,62 +50,48 @@ public class OperationService {
     private static String ecb(String message, String key) {
         List<String> substrings = getSubstrings(message, SUBSTRING_LENGTH_FOR_ECB);
         List<Long> substringsBytes = getBytes(substrings);
-        long keyBytes = getByte(key);
-        List<Long> encryptedBytes = applyEncryption(substringsBytes, keyBytes, XOR);
+        long keyByte = getByte(key);
+        List<Long> encryptedBytes = applyEncryption(substringsBytes, keyByte, XOR);
         List<String> encryptedMessageSubstrings = getTexts(encryptedBytes);
 
         return concatStrings(encryptedMessageSubstrings);
     }
 
+    /**
+     * Encrypts or decrypts message using CBC operation
+     * @param message String to encrypt or decrypt
+     * @param key Key use for ECB operation
+     * @param iv first encrypted byte, used for encryption
+     * @return Encrypted or decrypted message
+     */
     private static String cbc(String message, String key, String iv, Operation operation) {
-        switch (operation) {
-            case ENCRYPT:
-                return encryptCbc(message, key, iv);
-            default:
-            case DECRYPT:
-                return decryptCbc(message, key);
-        }
-    }
-
-    private static String encryptCbc(String message, String key, String iv) {
         List<String> substrings = getSubstrings(message, SUBSTRING_LENGTH_FOR_CBC);
         List<Long> substringsBytes = getBytes(substrings);
-        long keyBytes = getByte(key);
+        long keyByte = getByte(key);
 
-        List<Long> encryptedBytes = new ArrayList<>();
-        encryptedBytes.add(getByte(iv));
+        List<Long> foundBytes = new ArrayList<>();
 
-        if (substrings.size() > 1) {
-            for (Long substringsByte : substringsBytes) {
-                long lastEncryptedBytes = encryptedBytes.get(encryptedBytes.size() - 1);
-                long partiallyEncryptedBytes = applyEncryption(substringsByte, lastEncryptedBytes, XOR);
-                encryptedBytes.add(applyEncryption(partiallyEncryptedBytes, keyBytes, XOR));
+        if (operation == Operation.ENCRYPT) {
+            foundBytes.add(getByte(iv));
+
+            if (substrings.size() > 1) {
+                for (Long substringsByte : substringsBytes) {
+                    long lastEncryptedBytes = foundBytes.get(foundBytes.size() - 1);
+                    long partiallyEncryptedBytes = applyEncryption(substringsByte, lastEncryptedBytes, XOR);
+                    foundBytes.add(applyEncryption(partiallyEncryptedBytes, keyByte, XOR));
+                }
+            }
+        } else {
+            for (int i = 1; i < substringsBytes.size(); i++) {
+                long partiallyDecryptedBytes = applyEncryption(substringsBytes.get(i), keyByte, XOR);
+                long decryptedSubstringBytes = applyEncryption(substringsBytes.get(i - 1), partiallyDecryptedBytes, XOR);
+                foundBytes.add(decryptedSubstringBytes);
             }
         }
 
-        List<String> encryptedMessageSubstrings = getTexts(encryptedBytes);
+        List<String> foundMessageSubstrings = getTexts(foundBytes);
 
-        return concatStrings(encryptedMessageSubstrings);
-    }
-
-    // TODO : See if encrypt and decrypt can be partially merged
-    private static String decryptCbc(String message, String key) {
-        List<String> substrings = getSubstrings(message, SUBSTRING_LENGTH_FOR_CBC);
-        List<Long> substringsBytes = getBytes(substrings);
-        long keyBytes = getByte(key);
-
-        // TODO : If substring.size < 1
-
-        List<Long> decryptedBytes = new ArrayList<>();
-        for (int i = 1; i < substringsBytes.size(); i++) {
-            long partiallyDecryptedBytes = applyEncryption(substringsBytes.get(i), keyBytes, XOR);
-            long decryptedSubstringBytes = applyEncryption(substringsBytes.get(i - 1), partiallyDecryptedBytes, XOR);
-            decryptedBytes.add(decryptedSubstringBytes);
-        }
-
-        List<String> decryptedMessageSubstrings = getTexts(decryptedBytes);
-
-        return concatStrings(decryptedMessageSubstrings);
+        return concatStrings(foundMessageSubstrings);
     }
 
     // TODO : Complete CFB
