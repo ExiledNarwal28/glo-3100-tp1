@@ -18,6 +18,7 @@ public class OperationService {
     private static final int SUBSTRING_LENGTH_FOR_ECB = 8;
     private static final int SUBSTRING_LENGTH_FOR_CBC = 8;
     private static final int SUBSTRING_LENGTH_FOR_CTR = 8;
+    private static final int SUBSTRING_LENGTH_FOR_CFB = 5;
     // TODO : Maybe we should move XOR to EncryptionUtils
     private static final Encryption<Long> XOR = ((firstBytes, secondBytes) -> firstBytes ^ secondBytes);
 
@@ -98,6 +99,23 @@ public class OperationService {
 
     // TODO : Complete CFB
     private static String cfb() {
+        // I_0 = IV
+        // O_0 = applyEncryption(I_0, keyByte)
+        // L_0 = r left bits of O_0
+
+        // if mode is decrypt
+        //   remove first of substringBytes
+        // end if
+
+        // for each substringBytes
+        //   int i = 0;
+        //   c_i =
+        // end for
+
+        // if mode is encrypt
+        //   add iv to start of substringBytes
+        // end if
+
         return "";
     }
 
