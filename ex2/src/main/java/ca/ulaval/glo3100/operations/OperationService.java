@@ -105,17 +105,7 @@ public class OperationService {
                 : getSubstrings(message, SUBSTRING_LENGTH_FOR_CFB, FIRST_SUBSTRING_LENGTH_FOR_CFB);
         List<Long> substringsBytes = getBytes(substrings);
         long keyByte = getByte(key);
-
-        // TODO : List probably not needed
-        List<Long> iBytes = new ArrayList<>();
-        iBytes.add(getByte(iv));
-
-        // TODO : List probably not needed
-        List<Long> oBytes = new ArrayList<>();
-        oBytes.add(applyEncryption(iBytes.get(0), keyByte, XOR));
-
-        String oByte = getText(oBytes.get(0));
-        String lString = getSubstring(oByte, 0, r);
+        long iByte = getByte(iv);
 
         if (operation == Operation.DECRYPT) {
             substringsBytes.remove(0);
@@ -123,23 +113,30 @@ public class OperationService {
 
         List<Long> foundBytes = new ArrayList<>();
 
-        for (String substring : substrings) {
-            long foundByte = applyEncryption(getByte(substring), getByte(lString), XOR);
+        for (long substringsByte : substringsBytes) {
+            long oByte = applyEncryption(iByte, keyByte, XOR);
+            String o = getText(oByte);
+            String l = getSubstring(o, 0, r);
+            long lByte = getByte(l);
 
-            long lastI = iBytes.get(iBytes.size() - 1);
-            // TODO : Not sure
-            long newI = (((long) (2 ^ r) * lastI) + foundByte) % (2^(substrings.size()));
-            iBytes.add(newI);
+            long foundByte = applyEncryption(substringsByte, lByte, XOR);
+            foundBytes.add(foundByte);
 
-            oByte = getText(oBytes.get(0));
-            lString = getSubstring(oByte, 0, r);
+            iByte = (long) ((((long) Math.pow(2, r) * iByte) + foundByte) % Math.pow(2, substrings.size()));
         }
 
-        if (operation == Operation.ENCRYPT) {
-            foundBytes.add(0, getByte(iv));
-        }
+        List<String> foundMessageSubstrings = new ArrayList<>();
 
-        List<String> foundMessageSubstrings = getTexts(foundBytes);
+        switch (operation) {
+            case ENCRYPT:
+                foundMessageSubstrings.add(iv);
+                foundMessageSubstrings.addAll(getTexts(foundBytes, r));
+                break;
+            default:
+            case DECRYPT:
+                foundMessageSubstrings = getTexts(foundBytes, r);
+                break;
+        }
 
         return concatStrings(foundMessageSubstrings);
     }

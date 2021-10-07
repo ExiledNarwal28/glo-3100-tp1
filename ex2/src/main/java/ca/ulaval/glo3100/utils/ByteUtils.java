@@ -28,14 +28,23 @@ public class ByteUtils {
     }
 
     public static List<String> getTexts(List<Long> bytes) {
+        // TODO : Refactor 8
+        return getTexts(bytes, 8);
+    }
+
+    public static List<String> getTexts(List<Long> bytes, int byteLength) {
         return bytes
                 .stream()
-                .map(ByteUtils::getText)
+                .map((singleByte) -> getText(singleByte, byteLength))
                 .collect(Collectors.toList());
     }
 
     public static String getText(long bytes) {
-        int byteLength = 8;
+        // TODO : Refactor 8
+        return getText(bytes, 8);
+    }
+
+    public static String getText(long bytes, int byteLength) {
         String text = Long.toBinaryString(bytes);
         int neededPadding = byteLength - text.length();
 
