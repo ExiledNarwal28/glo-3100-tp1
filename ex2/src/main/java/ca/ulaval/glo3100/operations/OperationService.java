@@ -18,6 +18,7 @@ public class OperationService {
     private static final int SUBSTRING_LENGTH_FOR_ECB = 8;
     private static final int SUBSTRING_LENGTH_FOR_CBC = 8;
     private static final int SUBSTRING_LENGTH_FOR_CTR = 8;
+    private static final int FIRST_SUBSTRING_LENGTH_FOR_CFB = 8;
     private static final int SUBSTRING_LENGTH_FOR_CFB = 5;
     // TODO : Maybe we should move XOR to EncryptionUtils
     private static final Encryption<Long> XOR = ((firstBytes, secondBytes) -> firstBytes ^ secondBytes);
@@ -37,7 +38,7 @@ public class OperationService {
             case OFB:
                 return ofb();
             case CFB:
-                return cfb();
+                return cfb(args.message, args.key, args.iv, args.r, args.operation);
             default:
                 return "";
         }
@@ -98,7 +99,13 @@ public class OperationService {
     }
 
     // TODO : Complete CFB
-    private static String cfb() {
+    private static String cfb(String message, String key, String iv, int r, Operation operation) {
+        List<String> substrings = operation == Operation.ENCRYPT
+                ? getSubstrings(message, SUBSTRING_LENGTH_FOR_CFB)
+                : getSubstrings(message, SUBSTRING_LENGTH_FOR_CFB, FIRST_SUBSTRING_LENGTH_FOR_CFB);
+        List<Long> substringsBytes = getBytes(substrings);
+        long keyByte = getByte(key);
+
         // I_0 = IV
         // O_0 = applyEncryption(I_0, keyByte)
         // L_0 = r left bits of O_0

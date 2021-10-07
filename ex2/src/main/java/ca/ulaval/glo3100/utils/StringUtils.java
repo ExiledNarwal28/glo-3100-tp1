@@ -21,6 +21,17 @@ public class StringUtils {
         return substring;
     }
 
+    public static List<String> getSubstrings(String string, int substringLength, int firstSubstringLength) {
+        List<String> substring = new ArrayList<>();
+
+        substring.add(getSubstring(string, 0, firstSubstringLength));
+
+        String cutString = getSubstring(string, firstSubstringLength, string.length() - firstSubstringLength);
+        substring.addAll(getSubstrings(cutString, substringLength));
+
+        return substring;
+    }
+
     public static String getSubstring(String text, int index, int substringLength) {
         return text.substring(index, Math.min(index + substringLength, text.length()));
     }
