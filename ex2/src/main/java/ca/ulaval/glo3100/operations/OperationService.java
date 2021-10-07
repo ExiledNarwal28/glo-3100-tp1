@@ -31,7 +31,7 @@ public class OperationService {
             case CBC:
                 return cbc(args.message, args.key, args.iv, args.operation);
             case CTR:
-                return ctr(args.message, args.key, args.iv);
+                return ctr(args.message, args.key, args.iv, args.operation);
             case OFB:
                 return ofb();
             case CFB:
@@ -107,10 +107,14 @@ public class OperationService {
 
     // TODO : Fix CTR
     // TODO : Add javadocs
-    private static String ctr(String message, String key, String iv) {
+    private static String ctr(String message, String key, String iv, Operation operation) {
         List<String> substrings = getSubstrings(message, SUBSTRING_LENGTH_FOR_CTR);
         List<Long> substringsBytes = getBytes(substrings);
         long keyByte = getByte(key);
+
+        if (operation == Operation.DECRYPT) {
+            substringsBytes.remove(0);
+        }
 
         List<Long> counters = new ArrayList<>();
         counters.add(getByte(iv));
@@ -119,7 +123,6 @@ public class OperationService {
 
         for (long substringsByte : substringsBytes) {
             long lastCounter = counters.get(counters.size() - 1);
-            // TODO : Not sure
             long counter = lastCounter + 1L;
             counters.add(counter);
 
@@ -127,6 +130,10 @@ public class OperationService {
             long foundByte = applyEncryption(encryptedCounter, substringsByte, XOR);
 
             foundBytes.add(foundByte);
+        }
+
+        if (operation == Operation.ENCRYPT) {
+            foundBytes.add(0, counters.get(0));
         }
 
         List<String> foundMessageSubstrings = getTexts(foundBytes);
