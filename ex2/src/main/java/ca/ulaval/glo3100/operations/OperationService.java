@@ -10,8 +10,7 @@ import java.util.List;
 
 import static ca.ulaval.glo3100.utils.ByteUtils.*;
 import static ca.ulaval.glo3100.utils.EncryptionUtils.applyEncryption;
-import static ca.ulaval.glo3100.utils.StringUtils.concatStrings;
-import static ca.ulaval.glo3100.utils.StringUtils.getSubstrings;
+import static ca.ulaval.glo3100.utils.StringUtils.*;
 
 public class OperationService {
 
@@ -98,7 +97,8 @@ public class OperationService {
         return concatStrings(foundMessageSubstrings);
     }
 
-    // TODO : Complete CFB
+    // TODO : Fix CFB
+    // TODO : Add javadocs
     private static String cfb(String message, String key, String iv, int r, Operation operation) {
         List<String> substrings = operation == Operation.ENCRYPT
                 ? getSubstrings(message, SUBSTRING_LENGTH_FOR_CFB)
@@ -106,24 +106,42 @@ public class OperationService {
         List<Long> substringsBytes = getBytes(substrings);
         long keyByte = getByte(key);
 
-        // I_0 = IV
-        // O_0 = applyEncryption(I_0, keyByte)
-        // L_0 = r left bits of O_0
+        // TODO : List probably not needed
+        List<Long> iBytes = new ArrayList<>();
+        iBytes.add(getByte(iv));
 
-        // if mode is decrypt
-        //   remove first of substringBytes
-        // end if
+        // TODO : List probably not needed
+        List<Long> oBytes = new ArrayList<>();
+        oBytes.add(applyEncryption(iBytes.get(0), keyByte, XOR));
 
-        // for each substringBytes
-        //   int i = 0;
-        //   c_i =
-        // end for
+        String oByte = getText(oBytes.get(0));
+        String lString = getSubstring(oByte, 0, r);
 
-        // if mode is encrypt
-        //   add iv to start of substringBytes
-        // end if
+        if (operation == Operation.DECRYPT) {
+            substringsBytes.remove(0);
+        }
 
-        return "";
+        List<Long> foundBytes = new ArrayList<>();
+
+        for (String substring : substrings) {
+            long foundByte = applyEncryption(getByte(substring), getByte(lString), XOR);
+
+            long lastI = iBytes.get(iBytes.size() - 1);
+            // TODO : Not sure
+            long newI = (((long) (2 ^ r) * lastI) + foundByte) % (2^(substrings.size()));
+            iBytes.add(newI);
+
+            oByte = getText(oBytes.get(0));
+            lString = getSubstring(oByte, 0, r);
+        }
+
+        if (operation == Operation.ENCRYPT) {
+            foundBytes.add(0, getByte(iv));
+        }
+
+        List<String> foundMessageSubstrings = getTexts(foundBytes);
+
+        return concatStrings(foundMessageSubstrings);
     }
 
     // TODO : Complete OFB
