@@ -2,6 +2,7 @@ package ca.ulaval.glo3100.operations;
 
 import ca.ulaval.glo3100.args.Args;
 import ca.ulaval.glo3100.args.Operation;
+import ca.ulaval.glo3100.console.Logger;
 import ca.ulaval.glo3100.utils.Encryption;
 
 import java.util.ArrayList;
@@ -61,7 +62,7 @@ public class OperationService {
     /**
      * Encrypts or decrypts message using CBC operation
      * @param message String to encrypt or decrypt
-     * @param key Key use for ECB operation
+     * @param key Key use for CBC operation
      * @param iv first encrypted byte, used for encryption
      * @return Encrypted or decrypted message
      */
@@ -105,8 +106,13 @@ public class OperationService {
         return "";
     }
 
-    // TODO : Fix CTR
-    // TODO : Add javadocs
+    /**
+     * Encrypts or decrypts message using CTR operation
+     * @param message String to encrypt or decrypt
+     * @param key Key use for CTR operation
+     * @param iv first counter value
+     * @return Encrypted or decrypted message
+     */
     private static String ctr(String message, String key, String iv, Operation operation) {
         List<String> substrings = getSubstrings(message, SUBSTRING_LENGTH_FOR_CTR);
         List<Long> substringsBytes = getBytes(substrings);
@@ -117,19 +123,20 @@ public class OperationService {
         }
 
         List<Long> counters = new ArrayList<>();
-        counters.add(getByte(iv));
+        long counter = getByte(iv);
+        counters.add(counter);
 
         List<Long> foundBytes = new ArrayList<>();
 
         for (long substringsByte : substringsBytes) {
-            long lastCounter = counters.get(counters.size() - 1);
-            long counter = lastCounter + 1L;
-            counters.add(counter);
-
             long encryptedCounter = applyEncryption(counter, keyByte, XOR);
             long foundByte = applyEncryption(encryptedCounter, substringsByte, XOR);
 
             foundBytes.add(foundByte);
+
+            long lastCounter = counters.get(counters.size() - 1);
+            counter = lastCounter + 1L;
+            counters.add(counter);
         }
 
         if (operation == Operation.ENCRYPT) {
