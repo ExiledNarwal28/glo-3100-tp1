@@ -122,7 +122,8 @@ public class OperationService {
             long foundByte = applyEncryption(substringsByte, lByte, XOR);
             foundBytes.add(foundByte);
 
-            iByte = (long) ((((long) Math.pow(2, r) * iByte) + foundByte) % Math.pow(2, substrings.size()));
+            // TODO : This might be wrong, since the first byte is encrypted/decrypted correctly
+            iByte = (long) ((((long) Math.pow(2, r) * iByte) + foundByte) % Math.pow(2, substringsBytes.size()));
         }
 
         List<String> foundMessageSubstrings = new ArrayList<>();
