@@ -100,7 +100,15 @@ public class OperationService {
     }
 
     // TODO : Fix CFB
-    // TODO : Add javadocs
+    // TODO : Cleanup CFB
+    /**
+     * Encrypts or decrypts message using CFB operation
+     * @param message String to encrypt or decrypt
+     * @param key Key use for CFB operation
+     * @param iv first counter value
+     * @param r byte length for CFB operation
+     * @return Encrypted or decrypted message
+     */
     private static String cfb(String message, String key, String iv, int r, Operation operation) {
         List<String> substrings = operation == Operation.ENCRYPT
                 ? getSubstrings(message, SUBSTRING_LENGTH_FOR_CFB)
@@ -110,34 +118,44 @@ public class OperationService {
         long iByte = getByte(iv);
 
         if (operation == Operation.DECRYPT) {
+            substrings.remove(0);
             substringsBytes.remove(0);
         }
 
         List<Long> foundBytes = new ArrayList<>();
+        // Keeping the last L to build back message
+        String l = "";
 
-        for (long substringsByte : substringsBytes) {
+        for (int i = 0; i < substringsBytes.size(); i++) {
             long oByte = applyEncryption(iByte, keyByte, XOR);
             String o = getText(oByte);
-            String l = getSubstring(o, 0, r);
+            l = getSubstring(o, 0, substrings.get(i).length());
             long lByte = getByte(l);
 
-            long foundByte = applyEncryption(substringsByte, lByte, XOR);
+            long foundByte = applyEncryption(substringsBytes.get(0), lByte, XOR);
             foundBytes.add(foundByte);
 
             // TODO : This might be wrong, since the first byte is encrypted/decrypted correctly
             iByte = (long) ((((long) Math.pow(2, r) * iByte) + foundByte) % Math.pow(2, substringsBytes.size()));
         }
 
+        // TODO : The following is the same for OFB and CFB, let's merge
         List<String> foundMessageSubstrings = new ArrayList<>();
 
         switch (operation) {
             case ENCRYPT:
                 foundMessageSubstrings.add(iv);
-                foundMessageSubstrings.addAll(getTexts(foundBytes, r));
+                for (int i = 0; i < foundBytes.size() - 1; i++) {
+                    foundMessageSubstrings.add(getText(foundBytes.get(i), r));
+                }
+                foundMessageSubstrings.add(getText(foundBytes.get(foundBytes.size() - 1), Math.min(r, l.length())));
                 break;
             default:
             case DECRYPT:
-                foundMessageSubstrings = getTexts(foundBytes, r);
+                for (int i = 0; i < foundBytes.size() - 1; i++) {
+                    foundMessageSubstrings.add(getText(foundBytes.get(i), r));
+                }
+                foundMessageSubstrings.add(getText(foundBytes.get(foundBytes.size() - 1), Math.min(r, l.length())));
                 break;
         }
 
