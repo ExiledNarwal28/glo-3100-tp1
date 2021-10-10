@@ -144,7 +144,7 @@ public class OperationService {
         return concatStrings(foundMessageSubstrings);
     }
 
-    // TODO : Fix OFB (final byte is wrong)
+    // TODO : Cleanup OFB
     // TODO : Add javadocs
     private static String ofb(String message, String key, String iv, int r, Operation operation) {
         List<String> substrings = operation == Operation.ENCRYPT
@@ -159,14 +159,19 @@ public class OperationService {
         }
 
         List<Long> foundBytes = new ArrayList<>();
+        // Keeping the last L to build back message
+        String l = "";
 
-        for (long substringsByte : substringsBytes) {
+        for (int i = 0; i < substringsBytes.size(); i++) {
             oByte = applyEncryption(oByte, keyByte, XOR);
             String o = getText(oByte);
-            String l = getSubstring(o, 0, r);
+            // TODO : Last byte of decrypt does not work
+            l = i == substringsBytes.size() - 1
+                    ? getSubstring(o, 0, Math.min(r, Long.toBinaryString(substringsBytes.get(i)).length()))
+                    : getSubstring(o, 0, r);
             long lByte = getByte(l);
 
-            long foundByte = applyEncryption(substringsByte, lByte, XOR);
+            long foundByte = applyEncryption(substringsBytes.get(i), lByte, XOR);
             foundBytes.add(foundByte);
         }
 
@@ -175,11 +180,17 @@ public class OperationService {
         switch (operation) {
             case ENCRYPT:
                 foundMessageSubstrings.add(iv);
-                foundMessageSubstrings.addAll(getTexts(foundBytes, r));
+                for (int i = 0; i < foundBytes.size() - 1; i++) {
+                    foundMessageSubstrings.add(getText(foundBytes.get(i), r));
+                }
+                foundMessageSubstrings.add(getText(foundBytes.get(foundBytes.size() - 1), Math.min(r, l.length())));
                 break;
             default:
             case DECRYPT:
-                foundMessageSubstrings = getTexts(foundBytes, r);
+                for (int i = 0; i < foundBytes.size() - 1; i++) {
+                    foundMessageSubstrings.add(getText(foundBytes.get(i), r));
+                }
+                foundMessageSubstrings.add(getText(foundBytes.get(foundBytes.size() - 1), Math.min(r, l.length())));
                 break;
         }
 
