@@ -155,6 +155,7 @@ public class OperationService {
         long oByte = getByte(iv);
 
         if (operation == Operation.DECRYPT) {
+            substrings.remove(0);
             substringsBytes.remove(0);
         }
 
@@ -165,10 +166,7 @@ public class OperationService {
         for (int i = 0; i < substringsBytes.size(); i++) {
             oByte = applyEncryption(oByte, keyByte, XOR);
             String o = getText(oByte);
-            // TODO : Last byte of decrypt does not work
-            l = i == substringsBytes.size() - 1
-                    ? getSubstring(o, 0, Math.min(r, Long.toBinaryString(substringsBytes.get(i)).length()))
-                    : getSubstring(o, 0, r);
+            l = getSubstring(o, 0, substrings.get(i).length());
             long lByte = getByte(l);
 
             long foundByte = applyEncryption(substringsBytes.get(i), lByte, XOR);
