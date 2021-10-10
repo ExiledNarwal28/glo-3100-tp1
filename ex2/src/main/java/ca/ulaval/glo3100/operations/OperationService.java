@@ -145,7 +145,14 @@ public class OperationService {
     }
 
     // TODO : Cleanup OFB
-    // TODO : Add javadocs
+    /**
+     * Encrypts or decrypts message using OFB operation
+     * @param message String to encrypt or decrypt
+     * @param key Key use for OFB operation
+     * @param iv first counter value
+     * @param r byte length for OFB operation
+     * @return Encrypted or decrypted message
+     */
     private static String ofb(String message, String key, String iv, int r, Operation operation) {
         List<String> substrings = operation == Operation.ENCRYPT
                 ? getSubstrings(message, SUBSTRING_LENGTH_FOR_OFB)
