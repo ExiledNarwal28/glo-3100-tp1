@@ -99,7 +99,7 @@ public class OperationService {
         return concatStrings(foundMessageSubstrings);
     }
 
-    // TODO : Fix CFB
+    // TODO : Fix CFB decrypt
     // TODO : Cleanup CFB
     /**
      * Encrypts or decrypts message using CFB operation
@@ -115,7 +115,7 @@ public class OperationService {
                 : getSubstrings(message, SUBSTRING_LENGTH_FOR_CFB, FIRST_SUBSTRING_LENGTH_FOR_CFB);
         List<Long> substringsBytes = getBytes(substrings);
         long keyByte = getByte(key);
-        long iByte = getByte(iv);
+        String i = iv;
 
         if (operation == Operation.DECRYPT) {
             substrings.remove(0);
@@ -126,17 +126,18 @@ public class OperationService {
         // Keeping the last L to build back message
         String l = "";
 
-        for (int i = 0; i < substringsBytes.size(); i++) {
+        for (int j = 0; j < substringsBytes.size(); j++) {
+            long iByte = getByte(i);
             long oByte = applyEncryption(iByte, keyByte, XOR);
             String o = getText(oByte);
-            l = getSubstring(o, 0, substrings.get(i).length());
+            l = getSubstring(o, 0, substrings.get(j).length());
+            i = i.substring(substrings.get(j).length());
             long lByte = getByte(l);
 
-            long foundByte = applyEncryption(substringsBytes.get(i), lByte, XOR);
+            long foundByte = applyEncryption(substringsBytes.get(j), lByte, XOR);
             foundBytes.add(foundByte);
 
-            // TODO : This might be wrong, since the first byte is encrypted/decrypted correctly
-            iByte = (long) ((((long) Math.pow(2, r) * iByte) + foundByte) % Math.pow(2, substringsBytes.size()));
+            i = i + getText(foundByte, substrings.get(j).length());
         }
 
         return buildResultForFeedbackModes(iv, r, l.length(), foundBytes, operation);
