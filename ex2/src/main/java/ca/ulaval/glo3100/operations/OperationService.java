@@ -132,7 +132,7 @@ public class OperationService {
             l = getSubstring(o, 0, substrings.get(i).length());
             long lByte = getByte(l);
 
-            long foundByte = applyEncryption(substringsBytes.get(0), lByte, XOR);
+            long foundByte = applyEncryption(substringsBytes.get(i), lByte, XOR);
             foundBytes.add(foundByte);
 
             // TODO : This might be wrong, since the first byte is encrypted/decrypted correctly
