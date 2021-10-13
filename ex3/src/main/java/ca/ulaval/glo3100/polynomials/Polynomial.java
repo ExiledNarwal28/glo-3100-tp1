@@ -15,9 +15,28 @@ public class Polynomial<T> {
         return x;
     }
 
-    // TODO Polynomial.toString
     @Override
     public String toString() {
-        return "";
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("f(x) = ");
+
+        if (!coefficients.isEmpty()) {
+            stringBuilder.append(String.format("%s * ", coefficients.get(0)));
+        }
+
+        for (int i = 1; i < coefficients.size(); i++) {
+            stringBuilder.append(String.format("%s x", coefficients.get(i)));
+
+            if (i > 1) {
+                stringBuilder.append(String.format("^(%s)", i));
+            }
+
+            // If not last
+            if (i != coefficients.size() - 1) {
+                stringBuilder.append(" * ");
+            }
+        }
+
+        return stringBuilder.toString();
     }
 }
