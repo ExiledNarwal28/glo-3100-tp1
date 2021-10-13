@@ -13,8 +13,6 @@ public class Main {
 
         Args assembledArgs = ArgsAssembler.assemble(args);
 
-        String result = ShamirService.execute(assembledArgs);
-
-        Logger.logInfo(String.format("%s : %s", assembledArgs.operation.toString(), result));
+        ShamirService.execute(assembledArgs);
     }
 }
