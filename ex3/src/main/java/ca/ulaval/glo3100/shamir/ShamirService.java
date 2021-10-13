@@ -24,7 +24,6 @@ public class ShamirService {
         }
     }
 
-    // TODO : Finish encrypt
     // TODO : Add javadocs
     public static void encrypt(int k, int n, int s, int q) {
         List<Integer> coefficients = new ArrayList<>();
@@ -47,10 +46,34 @@ public class ShamirService {
         Logger.logInfo(String.format("Points : %s", joinPoints(points)));
     }
 
-    // TODO : Finish decrypt
     // TODO : Add javadocs
     public static void decrypt(List<Point> points, int q) {
-        // Empty for now!
+        int k = points.size();
+
+        // TODO : Rename, this is the list of I
+        List<Double> i = new ArrayList<>();
+
+        // Build each I_i(0)
+        for (int j = 0; j < k; j++) {
+            // TODO : Rename this (sum of multiplications?)
+            double result = 1;
+
+            for (int m = 0; m < k; m++) {
+               if (m != j) {
+                   result *= (double) (points.get(m).x) / (points.get(m).x - points.get(j).x);
+               }
+            }
+
+            i.add(result);
+        }
+
+        // Sum to find L_0 (s)
+        double s = 0;
+        for (int j = 0; j < k; j++) {
+            s += points.get(j).y * i.get(j);
+        }
+
+        Logger.logInfo(String.format("S (c_0) : %s", s));
     }
 
     // TODO : Move
