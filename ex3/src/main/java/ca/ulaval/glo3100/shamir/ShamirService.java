@@ -12,8 +12,7 @@ import java.util.stream.Collectors;
 
 public class ShamirService {
 
-    private static final long SEED = 1337;
-    private static final Random RANDOM = new Random(SEED);
+    private static final Random RANDOM = new Random();
 
     public static void execute(Args args) {
         switch (args.operation) {
@@ -35,14 +34,14 @@ public class ShamirService {
             coefficients.add(generateRandomInt(0, k));
         }
 
-        Polynomial<Integer> polynomial = new Polynomial<>(coefficients);
+        Polynomial polynomial = new Polynomial(coefficients);
 
         Logger.logInfo(String.format("Polynomial : %s", polynomial));
 
         List<Point> points = new ArrayList<>();
         for (int i = 0; i < n; i++) {
             int x = i + 1;
-            points.add(new Point(x, polynomial.getResult(x)));
+            points.add(new Point(x, polynomial.getResult(x, q)));
         }
 
         Logger.logInfo(String.format("Points : %s", joinPoints(points)));

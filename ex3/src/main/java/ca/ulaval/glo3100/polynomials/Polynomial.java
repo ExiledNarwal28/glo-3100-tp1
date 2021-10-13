@@ -2,19 +2,26 @@ package ca.ulaval.glo3100.polynomials;
 
 import java.util.List;
 
-public class Polynomial<T> {
+public class Polynomial {
 
-    private List<T> coefficients;
+    private List<Integer> coefficients;
 
-    public Polynomial(List<T> coefficients) {
+    public Polynomial(List<Integer> coefficients) {
         this.coefficients = coefficients;
     }
 
-    // TODO Polynomial.getResult
-    public T getResult(T x) {
-        return x;
+    // TODO : Add javadocs
+    public int getResult(int x, int q) {
+        int result = 0;
+
+        for (int i = 0; i < coefficients.size(); i++) {
+            result += (coefficients.get(i) * Math.pow(x, i)) % q;
+        }
+
+        return result;
     }
 
+    // TODO : Add javadocs
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
