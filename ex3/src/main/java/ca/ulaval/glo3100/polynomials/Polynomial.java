@@ -11,11 +11,11 @@ public class Polynomial {
     }
 
     // TODO : Add javadocs
-    public int getResult(int x, int q) {
+    public int getResult(int x) {
         int result = 0;
 
         for (int i = 0; i < coefficients.size(); i++) {
-            result += (coefficients.get(i) * Math.pow(x, i)) % q;
+            result += (coefficients.get(i) * Math.pow(x, i));
         }
 
         return result;

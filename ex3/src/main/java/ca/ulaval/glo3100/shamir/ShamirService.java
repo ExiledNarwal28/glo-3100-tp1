@@ -18,19 +18,26 @@ public class ShamirService {
         switch (args.operation) {
             case ENCRYPT:
                 encrypt(args.k, args.n, args.s, args.q);
+                break;
             default:
             case DECRYPT:
                 decrypt(args.points, args.q);
+                break;
         }
     }
 
-    // TODO : Add javadocs
+    /**
+     * @param k Number of coefficient (minimum of keys to decrypt)
+     * @param n Number of generated keys
+     * @param s First coefficient (c_0)
+     * @param q Prime number used to generate coefficients
+     */
     public static void encrypt(int k, int n, int s, int q) {
         List<Integer> coefficients = new ArrayList<>();
         coefficients.add(s);
 
         for (int i = 0; i < k; i++) {
-            coefficients.add(generateRandomInt(0, k));
+            coefficients.add(generateRandomInt(0, q));
         }
 
         Polynomial polynomial = new Polynomial(coefficients);
@@ -40,13 +47,17 @@ public class ShamirService {
         List<Point> points = new ArrayList<>();
         for (int i = 0; i < n; i++) {
             int x = i + 1;
-            points.add(new Point(x, polynomial.getResult(x, q)));
+            points.add(new Point(x, polynomial.getResult(x) % q));
         }
 
         Logger.logInfo(String.format("Points : %s", joinPoints(points)));
     }
 
-    // TODO : Add javadocs
+    // TODO : Why do we need q???
+    /**
+     * @param points Keys to build back the first key (first coefficient)
+     * @param q Prime number used to generate coefficients
+     */
     public static void decrypt(List<Point> points, int q) {
         int k = points.size();
 
@@ -81,6 +92,7 @@ public class ShamirService {
         return RANDOM.nextInt(max - min + 1) + min;
     }
 
+    // TODO : Move
     private static String joinPoints(List<Point> points) {
         return points
                 .stream()
