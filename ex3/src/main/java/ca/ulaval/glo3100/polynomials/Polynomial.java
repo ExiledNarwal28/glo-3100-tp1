@@ -28,7 +28,7 @@ public class Polynomial {
         stringBuilder.append("f(x) = ");
 
         if (!coefficients.isEmpty()) {
-            stringBuilder.append(String.format("%s * ", coefficients.get(0)));
+            stringBuilder.append(String.format("%s + ", coefficients.get(0)));
         }
 
         for (int i = 1; i < coefficients.size(); i++) {
@@ -40,7 +40,7 @@ public class Polynomial {
 
             // If not last
             if (i != coefficients.size() - 1) {
-                stringBuilder.append(" * ");
+                stringBuilder.append(" + ");
             }
         }
 
