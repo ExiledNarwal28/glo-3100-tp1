@@ -9,6 +9,9 @@ import static ca.ulaval.glo3100.utils.StringUtils.concatStrings;
 
 public class ByteUtils {
 
+    private static final int BINARY = 2;
+    private static final int BYTE_LENGTH = 8;
+
     public static List<Long> getBytes(List<String> texts) {
         Logger.logDebug(String.format("Texts to get bytes : %s", concatStrings(texts)));
 
@@ -23,13 +26,11 @@ public class ByteUtils {
     }
 
     public static long getByte(String text) {
-        // TODO : Move 2 to static final
-        return Long.parseLong(text, 2);
+        return Long.parseLong(text, BINARY);
     }
 
     public static List<String> getTexts(List<Long> bytes) {
-        // TODO : Refactor 8
-        return getTexts(bytes, 8);
+        return getTexts(bytes, BYTE_LENGTH);
     }
 
     public static List<String> getTexts(List<Long> bytes, int byteLength) {
@@ -40,8 +41,7 @@ public class ByteUtils {
     }
 
     public static String getText(long bytes) {
-        // TODO : Refactor 8
-        return getText(bytes, 8);
+        return getText(bytes, BYTE_LENGTH);
     }
 
     public static String getText(long bytes, int byteLength) {

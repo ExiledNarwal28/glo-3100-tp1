@@ -9,17 +9,19 @@ import static ca.ulaval.glo3100.utils.ByteUtils.getText;
 
 public class EncryptionUtils {
 
-    public static List<Long> applyEncryption(List<Long> textsBytes, long keyBytes, Encryption<Long> encryption) {
+    private static final Encryption<Long> XOR = ((firstBytes, secondBytes) -> firstBytes ^ secondBytes);
+
+    public static List<Long> applyEncryption(List<Long> textsBytes, long keyBytes) {
         return textsBytes
                 .stream()
-                .map(textBytes -> applyEncryption(textBytes, keyBytes, encryption))
+                .map(textBytes -> applyEncryption(textBytes, keyBytes))
                 .collect(Collectors.toList());
     }
 
-    public static long applyEncryption(long textByte, long keyByte, Encryption<Long> encryption) {
+    public static long applyEncryption(long textByte, long keyByte) {
         Logger.logDebug(String.format("Applying key (%s) to text : %s", getText(keyByte), getText(textByte)));
 
-        long encryptedText = encryption.encrypt(textByte, keyByte);
+        long encryptedText = XOR.encrypt(textByte, keyByte);
 
         Logger.logDebug(String.format("  -> : %s", getText(encryptedText)));
 

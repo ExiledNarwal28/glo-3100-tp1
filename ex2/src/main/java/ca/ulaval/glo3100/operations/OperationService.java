@@ -21,9 +21,6 @@ public class OperationService {
     private static final int FIRST_SUBSTRING_LENGTH_FOR_OFB = 8;
     private static final int SUBSTRING_LENGTH_FOR_OFB = 5;
 
-    // TODO : Maybe we should move XOR to EncryptionUtils
-    private static final Encryption<Long> XOR = ((firstBytes, secondBytes) -> firstBytes ^ secondBytes);
-
     public static String execute(Args args) {
        return startMode(args);
     }
@@ -56,7 +53,7 @@ public class OperationService {
         List<String> substrings = getSubstrings(message, SUBSTRING_LENGTH_FOR_ECB);
         List<Long> substringsBytes = getBytes(substrings);
         long keyByte = getByte(key);
-        List<Long> encryptedBytes = applyEncryption(substringsBytes, keyByte, XOR);
+        List<Long> encryptedBytes = applyEncryption(substringsBytes, keyByte);
         List<String> encryptedMessageSubstrings = getTexts(encryptedBytes);
 
         return concatStrings(encryptedMessageSubstrings);
@@ -82,14 +79,14 @@ public class OperationService {
             if (substrings.size() > 1) {
                 for (Long substringsByte : substringsBytes) {
                     long lastEncryptedBytes = foundBytes.get(foundBytes.size() - 1);
-                    long partiallyEncryptedBytes = applyEncryption(substringsByte, lastEncryptedBytes, XOR);
-                    foundBytes.add(applyEncryption(partiallyEncryptedBytes, keyByte, XOR));
+                    long partiallyEncryptedBytes = applyEncryption(substringsByte, lastEncryptedBytes);
+                    foundBytes.add(applyEncryption(partiallyEncryptedBytes, keyByte));
                 }
             }
         } else {
             for (int i = 1; i < substringsBytes.size(); i++) {
-                long partiallyDecryptedBytes = applyEncryption(substringsBytes.get(i), keyByte, XOR);
-                long decryptedSubstringBytes = applyEncryption(substringsBytes.get(i - 1), partiallyDecryptedBytes, XOR);
+                long partiallyDecryptedBytes = applyEncryption(substringsBytes.get(i), keyByte);
+                long decryptedSubstringBytes = applyEncryption(substringsBytes.get(i - 1), partiallyDecryptedBytes);
                 foundBytes.add(decryptedSubstringBytes);
             }
         }
@@ -128,16 +125,15 @@ public class OperationService {
 
         for (int j = 0; j < substringsBytes.size(); j++) {
             long iByte = getByte(i);
-            long oByte = applyEncryption(iByte, keyByte, XOR);
+            long oByte = applyEncryption(iByte, keyByte);
             String o = getText(oByte);
             l = getSubstring(o, 0, substrings.get(j).length());
-            i = i.substring(substrings.get(j).length());
             long lByte = getByte(l);
 
-            long foundByte = applyEncryption(substringsBytes.get(j), lByte, XOR);
+            long foundByte = applyEncryption(substringsBytes.get(j), lByte);
             foundBytes.add(foundByte);
 
-            i = i + getText(foundByte, substrings.get(j).length());
+            i = i.substring(substrings.get(j).length()) + getText(foundByte, substrings.get(j).length());
         }
 
         return buildResultForFeedbackModes(iv, r, l.length(), foundBytes, operation);
@@ -170,12 +166,12 @@ public class OperationService {
         String l = "";
 
         for (int i = 0; i < substringsBytes.size(); i++) {
-            oByte = applyEncryption(oByte, keyByte, XOR);
+            oByte = applyEncryption(oByte, keyByte);
             String o = getText(oByte);
             l = getSubstring(o, 0, substrings.get(i).length());
             long lByte = getByte(l);
 
-            long foundByte = applyEncryption(substringsBytes.get(i), lByte, XOR);
+            long foundByte = applyEncryption(substringsBytes.get(i), lByte);
             foundBytes.add(foundByte);
         }
 
@@ -228,8 +224,8 @@ public class OperationService {
         List<Long> foundBytes = new ArrayList<>();
 
         for (long substringsByte : substringsBytes) {
-            long encryptedCounter = applyEncryption(counter, keyByte, XOR);
-            long foundByte = applyEncryption(encryptedCounter, substringsByte, XOR);
+            long encryptedCounter = applyEncryption(counter, keyByte);
+            long foundByte = applyEncryption(encryptedCounter, substringsByte);
 
             foundBytes.add(foundByte);
 
