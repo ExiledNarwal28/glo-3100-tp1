@@ -96,8 +96,6 @@ public class OperationService {
         return concatStrings(foundMessageSubstrings);
     }
 
-    // TODO : Fix CFB decrypt
-    // TODO : Cleanup CFB
     /**
      * Encrypts or decrypts message using CFB operation
      * @param message String to encrypt or decrypt
@@ -133,13 +131,16 @@ public class OperationService {
             long foundByte = applyEncryption(substringsBytes.get(j), lByte);
             foundBytes.add(foundByte);
 
-            i = i.substring(substrings.get(j).length()) + getText(foundByte, substrings.get(j).length());
+            if (operation == Operation.ENCRYPT) {
+                i = i.substring(substrings.get(j).length()) + getText(foundByte, substrings.get(j).length());
+            } else {
+                i = i.substring(substrings.get(j).length()) + substrings.get(j);
+            }
         }
 
         return buildResultForFeedbackModes(iv, r, l.length(), foundBytes, operation);
     }
 
-    // TODO : Cleanup OFB
     /**
      * Encrypts or decrypts message using OFB operation
      * @param message String to encrypt or decrypt
