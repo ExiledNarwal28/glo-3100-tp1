@@ -8,6 +8,7 @@ public class ArgsAssembler {
     private static final String MODE_ARG = "-mode";
     private static final String IV_ARG = "-iv";
     private static final String R_ARG = "-r";
+    private static final int BYTE_LENGTH = 8;
 
     public static Args assemble(String[] args) {
         // Default values
@@ -41,6 +42,41 @@ public class ArgsAssembler {
                 default:
                     throw new IllegalArgumentException("Invalid arguments");
             }
+        }
+
+        if (operation == null) {
+            throw new IllegalArgumentException("Operation must be specified with -op (enc or dec)");
+        }
+
+        if (mode == null) {
+            throw new IllegalArgumentException("Mode must be specified with -mode (ECB, CBC, CTR, OFB or CFB)");
+        }
+
+        if (key == null || key.length() != BYTE_LENGTH) {
+            throw new IllegalArgumentException("Key of length 8 must be specified with -k");
+        }
+
+        // Validation specific to each mode
+        switch(mode) {
+            case CBC:
+                if (operation == Operation.ENCRYPT && (iv == null || iv.length() != BYTE_LENGTH)) {
+                    throw new IllegalArgumentException("IV of length 8 must be specified with -iv");
+                }
+                break;
+            case OFB:
+            case CFB:
+                if (iv == null || iv.length() != BYTE_LENGTH) {
+                    throw new IllegalArgumentException("IV of length 8 must be specified with -iv");
+                }
+                if (r == 0) {
+                    throw new IllegalArgumentException("R must be specified with -r");
+                }
+                break;
+            case CTR:
+                if (iv == null || iv.length() != BYTE_LENGTH) {
+                    throw new IllegalArgumentException("IV of length 8 must be specified with -iv");
+                }
+                break;
         }
 
         return new Args(message, key, operation, iv, mode, r);
