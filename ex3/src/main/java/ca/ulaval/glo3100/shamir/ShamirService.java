@@ -84,12 +84,10 @@ public class ShamirService {
         Logger.logInfo(String.format("S (c_0) : %s", s));
     }
 
-    // TODO : Move
     private static int generateRandomInt(int min, int max) {
         return RANDOM.nextInt(max - min + 1) + min;
     }
 
-    // TODO : Move
     private static String joinPoints(List<Point> points) {
         return points
                 .stream()
