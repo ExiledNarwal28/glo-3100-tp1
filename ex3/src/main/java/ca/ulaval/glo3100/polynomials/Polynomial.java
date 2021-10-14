@@ -10,7 +10,10 @@ public class Polynomial {
         this.coefficients = coefficients;
     }
 
-    // TODO : Add javadocs
+    /**
+     * @param x variable to get result from
+     * @return f(x) for given x
+     */
     public int getResult(int x) {
         int result = 0;
 
@@ -21,7 +24,9 @@ public class Polynomial {
         return result;
     }
 
-    // TODO : Add javadocs
+    /**
+     * @return Polynomial in form of "f(x) = a + b x + c x^(2)"
+     */
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
