@@ -53,7 +53,6 @@ public class ShamirService {
         Logger.logInfo(String.format("Points : %s", joinPoints(points)));
     }
 
-    // TODO : Why do we need q???
     /**
      * @param points Keys to build back the first key (first coefficient)
      * @param q Prime number used to generate coefficients
@@ -61,27 +60,25 @@ public class ShamirService {
     public static void decrypt(List<Point> points, int q) {
         int k = points.size();
 
-        // TODO : Rename, this is the list of I
-        List<Double> i = new ArrayList<>();
+        List<Double> listOfI = new ArrayList<>();
 
         // Build each I_i(0)
         for (int j = 0; j < k; j++) {
-            // TODO : Rename this (sum of multiplications?)
-            double result = 1;
+            double sumOfMultiplications = 1;
 
             for (int m = 0; m < k; m++) {
                if (m != j) {
-                   result *= (double) (points.get(m).x) / (points.get(m).x - points.get(j).x);
+                   sumOfMultiplications *= (double) (points.get(m).x) / (points.get(m).x - points.get(j).x) % q;
                }
             }
 
-            i.add(result);
+            listOfI.add(sumOfMultiplications);
         }
 
         // Sum to find L_0 (s)
         double s = 0;
         for (int j = 0; j < k; j++) {
-            s += points.get(j).y * i.get(j);
+            s += (points.get(j).y * listOfI.get(j)) % q;
         }
 
         Logger.logInfo(String.format("S (c_0) : %s", s));
