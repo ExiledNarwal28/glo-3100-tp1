@@ -1,5 +1,7 @@
 package ca.ulaval.glo3100.args;
 
+import ca.ulaval.glo3100.console.Logger;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +16,7 @@ public class ArgsAssembler {
     private static final String S_ARG = "-s";
     private static final String Q_ARG = "-q";
     private static final String P_ARG = "-p";
+    private static final String DEBUG_ARG = "-debug";
 
     public static Args assemble(String[] args) {
         // Default values
@@ -54,6 +57,9 @@ public class ArgsAssembler {
                     int x = Integer.parseInt(args[i + 1]);
                     int y = Integer.parseInt(args[i + 2]);
                     points.add(new Point(x, y));
+                    break;
+                case DEBUG_ARG:
+                    Logger.isDebugging = true;
                     break;
             }
         }
