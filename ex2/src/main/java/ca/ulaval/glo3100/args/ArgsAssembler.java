@@ -1,5 +1,7 @@
 package ca.ulaval.glo3100.args;
 
+import ca.ulaval.glo3100.console.Logger;
+
 public class ArgsAssembler {
 
     private static final String MSG_ARG = "-msg";
@@ -8,6 +10,7 @@ public class ArgsAssembler {
     private static final String MODE_ARG = "-mode";
     private static final String IV_ARG = "-iv";
     private static final String R_ARG = "-r";
+    private static final String DEBUG_ARG = "-debug";
     private static final int BYTE_LENGTH = 8;
 
     public static Args assemble(String[] args) {
@@ -38,6 +41,9 @@ public class ArgsAssembler {
                     break;
                 case R_ARG:
                     r = Integer.parseInt(args[i + 1]);
+                    break;
+                case DEBUG_ARG:
+                    Logger.isDebugging = true;
                     break;
                 default:
                     throw new IllegalArgumentException("Invalid arguments");
